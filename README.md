@@ -1,4 +1,4 @@
-# Phiddle (v 0.5.1)
+# Phiddle (v 0.2.0)
 Visually minimalistic screen pixel measuring program.
 
 ## Phiddle is:
@@ -76,36 +76,25 @@ Visually minimalistic screen pixel measuring program.
 * Stability: deal with multiple screens and scaling 
 
 # History
-## ...
+## 0.2.0
 * Fixed: [Mac] Cursor change appearence
-## 0.5.1
 * Fixed: [Mac] Lock tool using ctrl key
 * Fixed: [Mac] Zoom seems to work now
 * Internal: [Mac] Some cleanup of code
-
-## 0.5.0
 * Tools: resize rect/oval in any corner
 * Mac: almost fully working version for Mac
-
-## 0.4.0
 * Tool: Oval
 * Tool mark: 1/2 and 1/3
 * Tool mark: toggle
 * Fixed: Placement of window bottom/right is off without translate (Skiasharp Forms/Control issue?)
 * Visuals: group zoom and info windows together and make them smaller/less obscuring
 
-## 0.3.0
+## 0.1.0
 * Tool: move placed tool
 * Tool: resize placed tool
-
-## 0.2.0
 * Info and Zoom window
 * Hide/Show windows
 * Hide/Show help lines
 * Toggle label placement
-
-## 0.1.0
-* Initial version
 * Line and Rect tools
 * Label
-
