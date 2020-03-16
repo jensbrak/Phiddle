@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phiddle.Core", "Phiddle.Core\Phiddle.Core.csproj", "{016ED364-BAF9-435F-BFED-D387F6492975}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phiddle.Mac", "Phiddle.Mac\Phiddle.Mac.csproj", "{4D92B6FE-4A11-437F-BAA1-1E30D998C621}"
+EndProject
+Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "Phiddle.Win", "Phiddle.Win\Phiddle.Win.csproj", "{3215A907-705C-4FC2-9BD7-D12FC44CF660}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06A4D039-03C0-441F-ACBD-C115B78132A5}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{016ED364-BAF9-435F-BFED-D387F6492975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{016ED364-BAF9-435F-BFED-D387F6492975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{016ED364-BAF9-435F-BFED-D387F6492975}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{016ED364-BAF9-435F-BFED-D387F6492975}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D92B6FE-4A11-437F-BAA1-1E30D998C621}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D92B6FE-4A11-437F-BAA1-1E30D998C621}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D92B6FE-4A11-437F-BAA1-1E30D998C621}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D92B6FE-4A11-437F-BAA1-1E30D998C621}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3215A907-705C-4FC2-9BD7-D12FC44CF660}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3215A907-705C-4FC2-9BD7-D12FC44CF660}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3215A907-705C-4FC2-9BD7-D12FC44CF660}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3215A907-705C-4FC2-9BD7-D12FC44CF660}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FB5FBCB9-F64C-43D1-AF3D-F5628657BAA4}
+	EndGlobalSection
+EndGlobal
