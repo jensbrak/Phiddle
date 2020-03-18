@@ -7,6 +7,7 @@ using SkiaSharp.Views.Mac;
 using SkiaSharp;
 using Phiddle.Core;
 using Phiddle.Core.Services;
+using Phiddle.Core.Settings;
 using Phiddle.Mac.Extensions;
 using Phiddle.Mac.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +22,7 @@ namespace Phiddle.Mac
 
         private PhiddleCore phiddle;
         private IScreenService  screen;
+		private ISettingsService state;
 		
 		public PhiddleWindowController() : base()
 		{
@@ -60,7 +62,12 @@ namespace Phiddle.Mac
 		{
 			phiddle = new PhiddleCore();
 			screen = new ScreenServiceMac(Window);
-			phiddle.ServiceCollection.AddSingleton(screen);
+			phiddle.Services.AddSingleton(screen);
+			state = new AppStateServiceMac();
+			phiddle.Services.AddSingleton(state);
+			state.Load();
+			state.Save();
+
 			phiddle.Initialize();
 			Window.Phiddle = phiddle;
 		}

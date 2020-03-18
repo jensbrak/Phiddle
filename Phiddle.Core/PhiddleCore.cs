@@ -2,10 +2,12 @@
 using Phiddle.Core.Extensions;
 using Phiddle.Core.Graphics;
 using Phiddle.Core.Services;
+using Phiddle.Core.Settings;
 using Phiddle.Core.Measure;
 using SkiaSharp;
 using System;
 using System.Timers;
+using System.IO;
 
 namespace Phiddle.Core
 {
@@ -59,7 +61,7 @@ namespace Phiddle.Core
         /// The collection of services of Phiddle.
         /// Important: all services must be added before call to <see cref="Initialize"/>.
         /// </summary>
-        public IServiceCollection ServiceCollection { get; private set; }
+        public IServiceCollection Services { get; private set; }
 
         /// <summary>
         /// The service provider of Phiddle
@@ -217,8 +219,20 @@ namespace Phiddle.Core
         /// </summary>
         public PhiddleCore()
         {
-            ServiceCollection = new ServiceCollection();
-            ServiceCollection.AddSingleton<ILoggingService, LoggingServiceConsole>();
+            Services = new ServiceCollection();
+            ConfigureServices(Services);
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            // https://stackoverflow.com/questions/40970944/how-to-update-values-into-appsetting-json
+            /*var config = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("phiddlesettings.json", false)
+            .Build();*/
+            services.AddSingleton<ILoggingService, LoggingServiceConsole>();
+            //services.AddOptions();
+            //services.Configure<PhiddleSettings>(config);
         }
 
         /// <summary>
@@ -230,10 +244,10 @@ namespace Phiddle.Core
             lastPos = SKPoint.Empty;
 
             // Setup services
-            ServiceProvider = ServiceCollection.BuildServiceProvider();
+            ServiceProvider = Services.BuildServiceProvider();
             Screen = ServiceProvider.GetRequiredService<IScreenService>();
             Log = ServiceProvider.GetRequiredService<ILoggingService>();
-
+            
             // Create tools
             toolSet = new ToolSet();
 
@@ -253,6 +267,7 @@ namespace Phiddle.Core
             // Setup refresh timer
             timer = new Timer(50) { AutoReset = true };
             timer.Elapsed += new ElapsedEventHandler(TimerElapsed);
+
             Log.Debug("Initialize", $"Core initialized with refresh rate = {1000 / timer.Interval:0} FPS");
         }
 
