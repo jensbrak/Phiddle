@@ -1,13 +1,10 @@
-﻿using Phiddle.Core.Settings;
-
-namespace Phiddle.Core.Services
+﻿namespace Phiddle.Core.Services
 {
-    public interface ISettingsService
+    public interface ISettingsService<T>
     {
-        ISettings Settings { get; set; }
-        string FolderPath { get; set; }
-        string FileName { get; set; }
+        T Settings { get; set; }
+        bool Loaded { get; }
         void Save();
-        bool Load();
+        void Load();
     }
 }

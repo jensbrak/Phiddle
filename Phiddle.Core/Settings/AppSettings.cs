@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Phiddle.Core.Settings
 {
-    public class Appearance
+    public class AppSettings
     {
         // Windows
         // .. Sizes & Positions

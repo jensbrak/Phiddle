@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Phiddle.sln = Phiddle.sln
 	EndProjectSection
 EndProject
-Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "Phiddle.Win", "Phiddle.Win\Phiddle.Win.csproj", "{691D3EBB-6D88-40B4-8872-01252BBBC770}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phiddle.Win", "Phiddle.Win\Phiddle.Win.csproj", "{380514A3-B9F1-4C8C-ABED-5D50FD1F6D6B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{4D92B6FE-4A11-437F-BAA1-1E30D998C621}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D92B6FE-4A11-437F-BAA1-1E30D998C621}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D92B6FE-4A11-437F-BAA1-1E30D998C621}.Release|Any CPU.Build.0 = Release|Any CPU
-		{691D3EBB-6D88-40B4-8872-01252BBBC770}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{691D3EBB-6D88-40B4-8872-01252BBBC770}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{691D3EBB-6D88-40B4-8872-01252BBBC770}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{691D3EBB-6D88-40B4-8872-01252BBBC770}.Release|Any CPU.Build.0 = Release|Any CPU
+		{380514A3-B9F1-4C8C-ABED-5D50FD1F6D6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{380514A3-B9F1-4C8C-ABED-5D50FD1F6D6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{380514A3-B9F1-4C8C-ABED-5D50FD1F6D6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{380514A3-B9F1-4C8C-ABED-5D50FD1F6D6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,7 +2,7 @@
 
 namespace Phiddle.Core.Settings
 {
-    public class PhiddleState : ISettings
+    public class AppState : ISettings
     {
         public int CurrentTool { get; set; } = 0;
         public LabelLocation LabelLocation { get; set; } = LabelLocation.Off;

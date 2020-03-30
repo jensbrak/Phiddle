@@ -8,6 +8,7 @@ using SkiaSharp;
 using System;
 using System.Timers;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Phiddle.Core
 {
@@ -46,95 +47,17 @@ namespace Phiddle.Core
     /// <item>Tool passive and mouse between endpoint bounds (either one of them): start resizing at selected endpoint </item>
     /// </list>
     /// </summary>
-    public class PhiddleCore
+    public class PhiddleCore : IDisposable
     {
         private Timer timer;
 
         private WindowBase windowTool;
         private WindowInfo windowInfo;
         private WindowZoom windowZoom;
-        private ToolSet toolSet;
+        private AppTools toolSet;
+        private AppActions actions;
         private HelpLines helpLines;
         private SKPoint lastPos;
-        
-        /// <summary>
-        /// The collection of services of Phiddle.
-        /// Important: all services must be added before call to <see cref="Initialize"/>.
-        /// </summary>
-        public IServiceCollection Services { get; private set; }
-
-        /// <summary>
-        /// The service provider of Phiddle
-        /// </summary>
-        public IServiceProvider ServiceProvider { get; private set; }
-
-        /// <summary>
-        /// Phiddle Core logging instance.
-        /// </summary>
-        public ILoggingService Log { get; private set; }
-
-        /// <summary>
-        /// Screen service instance.
-        /// </summary>
-        public IScreenService Screen { get; private set; }
-
-
-        /// <summary>
-        /// True if help lines (at mouse cursor) is visible, false otherwise
-        /// Note: if visible, the crosshair in Zoom Window is hidden, since
-        /// it will be obscured by the help lines.
-        /// </summary>
-        public bool HelpLinesVisible
-        {
-            get
-            {
-                return helpLines.Visible;
-            }
-            set
-            {
-                helpLines.Visible = value;
-                windowZoom.CrosshairVisible = !value;
-            }
-        }
-
-        /// <summary>
-        /// True if Info Window is visible, false otherwise
-        /// </summary>
-        public bool InfoWindowVisible
-        {
-            get
-            {
-                return windowInfo.Visible;
-            }
-            set
-            {
-                windowInfo.Visible = value;
-            }
-        }
-
-        /// <summary>
-        /// True if Zoom window is visible, false otherwise
-        /// </summary>
-        public bool ZoomWindowVisible 
-        { 
-            get
-            {
-                return windowZoom.Visible;
-            }
-            set
-            {
-                windowZoom.Visible = value;
-
-                if (windowZoom.Visible)
-                {
-                    timer.Start();
-                }
-                else
-                {
-                    timer.Stop();
-                }
-            }
-        }
 
         /// <summary>
         /// True if the tool is locked, false otherwise.
@@ -152,6 +75,33 @@ namespace Phiddle.Core
                 toolSet.SelectedTool.Locked = value;
             }
         }
+
+        #region Services
+
+        /// <summary>
+        /// The collection of services of Phiddle.
+        /// Important: all services must be added before call to <see cref="Initialize"/>.
+        /// </summary>
+        public IServiceCollection Services { get; private set; }
+
+        /// <summary>
+        /// The service provider of Phiddle
+        /// </summary>
+        public static IServiceProvider ServiceProvider { get; private set; }
+
+        /// <summary>
+        /// Phiddle Core logging instance.
+        /// </summary>
+        public ILoggingService Log { get; private set; }
+
+        /// <summary>
+        /// Screen service instance.
+        /// </summary>
+        public IScreenService Screen { get; private set; }
+
+        #endregion
+
+        #region UI Component properties
 
         /// <summary>
         /// The factor (of screen height) the windows will be scaled down with
@@ -213,6 +163,9 @@ namespace Phiddle.Core
             }
         }
 
+        #endregion
+
+        #region Start/Stop/Initialization
         /// <summary>
         /// Create an instance of Phiddle Core.
         /// Important: Use <see cref="Initialize"/> to actually initialize Phiddle to run.
@@ -220,19 +173,6 @@ namespace Phiddle.Core
         public PhiddleCore()
         {
             Services = new ServiceCollection();
-            ConfigureServices(Services);
-        }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            // https://stackoverflow.com/questions/40970944/how-to-update-values-into-appsetting-json
-            /*var config = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("phiddlesettings.json", false)
-            .Build();*/
-            services.AddSingleton<ILoggingService, LoggingServiceConsole>();
-            //services.AddOptions();
-            //services.Configure<PhiddleSettings>(config);
         }
 
         /// <summary>
@@ -243,13 +183,18 @@ namespace Phiddle.Core
         {
             lastPos = SKPoint.Empty;
 
-            // Setup services
+            // Setup services            
+            InitializeServices(Services);
             ServiceProvider = Services.BuildServiceProvider();
             Screen = ServiceProvider.GetRequiredService<IScreenService>();
             Log = ServiceProvider.GetRequiredService<ILoggingService>();
-            
+
+            // Actions
+            actions = InitializeActions();
+
             // Create tools
-            toolSet = new ToolSet();
+            var appState = ServiceProvider.GetRequiredService<SettingsService<AppState>>();
+            toolSet = new AppTools(appState);
 
             // Create UI components
 #if DEBUG
@@ -295,6 +240,17 @@ namespace Phiddle.Core
             timer.Stop();
             Log.Debug("Exit", "Core stopped");
         }
+
+        public void Dispose()
+        {
+            toolSet.Dispose();
+        }
+
+        #endregion
+
+        #region User Input
+
+        public void InvokeAction(ActionId actionId) => actions.Invoke(actionId);
 
         /// <summary>
         /// Update Phiddle Core with a mouse position <paramref name="p"/>
@@ -344,30 +300,9 @@ namespace Phiddle.Core
             toolSet.SelectedTool.NextAction(p);
         }
 
-        /// <summary>
-        /// Select next tool of Phiddle Core. 
-        /// Note: If previous tool was last one available, start over with first one.
-        /// </summary>
-        public void SelectNextTool()
-        {
-            toolSet.SelectNextTool();
-            windowInfo.ReportSelectedTool(toolSet.SelectedTool);
-            windowInfo.ReportMeasurements(toolSet.SelectedTool);
-        }
+        #endregion
 
-        /// <summary>
-        /// Select next label placement of the tools.
-        /// Note: if previous placement was last one available, start over with the first one.
-        /// </summary>
-        public void ToggleLabelPlacement()
-        {
-            toolSet.ToggleLabelPlacement();
-        }
-
-        public void ToggleToolMarks(MarkCategory c)
-        {
-            toolSet.ToggleToolMarks(c);
-        }
+        #region UI Drawing
 
         /// <summary>
         /// Draw Phiddle Core Tool at canvas <paramref name="c"/>
@@ -400,6 +335,10 @@ namespace Phiddle.Core
         {
             windowZoom.Draw(c);
         }
+
+        #endregion
+
+        #region UI Updating
 
         /// <summary>
         /// Update the Zoom Window with a new mouse position. This means mouse have been moved and 
@@ -456,5 +395,36 @@ namespace Phiddle.Core
             var zoomAtPos = toolSet.SelectedTool.Resizing ? toolSet.SelectedTool.ActiveEndpoint.Pos : Screen.MousePosition();
             UpdateZoomWindow(zoomAtPos);
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private void InitializeServices(IServiceCollection services)
+        {
+            services.AddSingleton<ILoggingService, LoggingServiceConsole>();
+            services.AddSingleton<SettingsService<AppState>>();
+        }
+
+        private AppActions InitializeActions()
+        {
+            var actions = new Dictionary<ActionId, ActionDelegate>(Enum.GetValues(typeof(ActionId)).Length)
+            {
+                { ActionId.ApplicationExit, () => { Stop(); Dispose(); } },
+                { ActionId.HelpLinesToggleVisible, () => { helpLines.Visible = !helpLines.Visible; windowZoom.CrosshairVisible = !windowZoom.CrosshairVisible; windowZoom.CrosshairVisible = !windowZoom.CrosshairVisible ; } },
+                { ActionId.LabelTogglePlacement, () => toolSet.ToggleLabelPlacement() },
+                { ActionId.ToolMarksGoldenRatioToggleVisible, () => toolSet.ToggleToolMarks(MarkCategory.GoldenRatio) },
+                { ActionId.ToolMarksEndpointToggleVisible, () => toolSet.ToggleToolMarks(MarkCategory.Endpoint) },
+                { ActionId.ToolMarksMiddleToggleVisible, () => toolSet.ToggleToolMarks(MarkCategory.Middle) },
+                { ActionId.ToolMarksThirdToggleVisible, () => toolSet.ToggleToolMarks(MarkCategory.Third) },
+                { ActionId.ToolSelectNext, () => { toolSet.SelectNextTool(); windowInfo.ReportSelectedTool(toolSet.SelectedTool); windowInfo.ReportMeasurements(toolSet.SelectedTool);} },
+                { ActionId.WindowInfoToggleVisible, () => windowInfo.Visible = !windowInfo.Visible },
+                { ActionId.WindowZoomToggleVisible, () => { windowZoom.Visible = !windowZoom.Visible;if (windowZoom.Visible) timer.Start(); else timer.Stop();}},
+            };
+
+            return new AppActions() { Actions = actions };
+        }
+
+        #endregion
     }
 }
