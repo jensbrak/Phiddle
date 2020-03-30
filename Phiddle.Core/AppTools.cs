@@ -1,10 +1,14 @@
 ﻿using Phiddle.Core.Measure;
+using Phiddle.Core.Settings;
+using Phiddle.Core.Services;
 using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Phiddle.Core
 {
-    public class ToolSet
+    public class AppTools : IDisposable
     {
+        private SettingsService<AppState> state;
         private readonly ToolBase[] tools;
         private int selected;
         private LabelLocation labelLocation;
@@ -17,10 +21,12 @@ namespace Phiddle.Core
             }
         }
 
-        public ToolSet()
+        public AppTools(SettingsService<AppState> appState)
         {
-            labelLocation = Defaults.ToolLabelLocation;
-            selected = 0;
+            state = appState;
+            labelLocation = appState.Settings.LabelLocation;
+            selected = appState.Settings.CurrentTool;
+            
             tools = new ToolBase[]
             {
                 new ToolLine() { LabelLocation = labelLocation },
@@ -51,6 +57,13 @@ namespace Phiddle.Core
             {
                 t.ToggleMarks(c);
             }
+        }
+
+        public void Dispose()
+        {
+            state.Settings.CurrentTool = selected;
+            state.Settings.LabelLocation = labelLocation;
+            state.Save();
         }
     }
 }

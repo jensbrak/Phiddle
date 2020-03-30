@@ -7,10 +7,12 @@ using SkiaSharp.Views.Mac;
 using SkiaSharp;
 using Phiddle.Core;
 using Phiddle.Core.Services;
+using Phiddle.Core.Settings;
 using Phiddle.Mac.Extensions;
 using Phiddle.Mac.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.InteropServices;
+using Phiddle.Core.Settings;
 
 namespace Phiddle.Mac
 {
@@ -60,17 +62,22 @@ namespace Phiddle.Mac
 		{
 			phiddle = new PhiddleCore();
 			screen = new ScreenServiceMac(Window);
-			phiddle.ServiceCollection.AddSingleton(screen);
+			phiddle.Services.AddSingleton(screen);
+			phiddle.Services.AddSingleton<SettingsService<AppInput>>();
+
 			phiddle.Initialize();
 			Window.Phiddle = phiddle;
 		}
 
 		private void InitializePhiddleViews()
         {
+			var appInputService = PhiddleCore.ServiceProvider.GetRequiredService<SettingsService<AppInput>>();
 			var frame = NSScreen.MainScreen.Frame;
-			var viewTool = new PhiddleView(frame, phiddle, Window);
-			viewTool.Identifier = "ViewTool";
-			viewTool.PaintSurface += HandlePaintGLSurfaceTool;
+            var viewTool = new PhiddleView(frame, phiddle, appInputService)
+            {
+                Identifier = "ViewTool"
+            };
+            viewTool.PaintSurface += HandlePaintGLSurfaceTool;
             //_ = viewTool.BecomeFirstResponder();
 			Window.ViewTool = viewTool;
 
@@ -78,8 +85,10 @@ namespace Phiddle.Mac
 			var ib = phiddle.InfoWindowSize.ToCGSize();
 			var viewRectInfo = new CGRect(il.X, il.Y - ib.Height, ib.Width, ib.Height);
 
-			var viewInfo = new PhiddleView(viewRectInfo, phiddle, Window);
-			viewInfo.Identifier = "ViewInfo";
+            var viewInfo = new PhiddleView(viewRectInfo, phiddle, appInputService)
+            {
+                Identifier = "ViewInfo"
+            };
             viewInfo.PaintSurface += HandlePaintGLSurfaceInfo;
             Window.ViewInfo = viewInfo;
 
@@ -87,9 +96,11 @@ namespace Phiddle.Mac
 			var zb = phiddle.ZoomWindowSize.ToCGSize();
 			var viewRectZoom = new CGRect(zl.X, zl.Y - zb.Height, zb.Width, zb.Height);
 
-			var viewZoom = new PhiddleView(viewRectZoom, phiddle, Window);
-			viewZoom.Identifier = "ViewZoom";
-			viewZoom.PaintSurface += HandlePaintGLSurfaceZoom;
+            var viewZoom = new PhiddleView(viewRectZoom, phiddle, appInputService)
+            {
+                Identifier = "ViewZoom"
+            };
+            viewZoom.PaintSurface += HandlePaintGLSurfaceZoom;
 			Window.ViewZoom = viewZoom;
 		}
 

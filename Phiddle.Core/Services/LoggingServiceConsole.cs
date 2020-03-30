@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace Phiddle.Core.Services
 {
     public class LoggingServiceConsole : ILoggingService

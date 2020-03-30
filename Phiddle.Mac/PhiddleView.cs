@@ -1,23 +1,33 @@
 ﻿using AppKit;
 using CoreGraphics;
 using Phiddle.Core;
+using Phiddle.Core.Settings;
+using Phiddle.Core.Services;
 using Phiddle.Mac.Extensions;
+using Phiddle.Mac.Settings;
 using SkiaSharp.Views.Mac;
 
 namespace Phiddle.Mac
 {
     public class PhiddleView : SKGLView
     {
+        private readonly AppInput appInput;
         private readonly PhiddleCore phiddle;
-        private readonly PhiddleWindow phiddleWindow;
         private NSTrackingArea trackingArea;
 
         public CGPoint MousePosition { get; set; }
 
-        public PhiddleView(CGRect frame, PhiddleCore phiddle, PhiddleWindow phiddleWindow) : base(frame)
+        public PhiddleView(CGRect frame, PhiddleCore phiddle, ISettingsService<AppInput> settingsService) : base(frame)
         {
             this.phiddle = phiddle;
-            this.phiddleWindow = phiddleWindow;
+            
+            if (!settingsService.Loaded)
+            {
+                settingsService.Settings = AppInputMac.Defaults;
+                settingsService.Save();
+            }
+
+            appInput = settingsService.Settings;
         }
 
         public override void PrepareOpenGL()
@@ -46,54 +56,23 @@ namespace Phiddle.Mac
 
         public override void KeyDown(NSEvent theEvent)
         {
-            var key = (NSKey)theEvent.KeyCode;
-
-            switch (key)
+            if (!appInput.Keys.ContainsKey(theEvent.KeyCode))
             {
-                case NSKey.Escape:
-                    phiddle.Stop();
-                    //NSApplication.SharedApplication.Terminate(this);
-                    Window.Close();
-                    break;
-                case NSKey.Space:
-                    phiddle.SelectNextTool();
-                    NeedsDisplay = true;
-                    break;
-                case NSKey.L:
-                    phiddle.ToggleLabelPlacement();
-                    NeedsDisplay = true;
-                    break;
-                case NSKey.Z:
-                    phiddle.ZoomWindowVisible = !phiddle.ZoomWindowVisible;
-                    NeedsDisplay = true;
-                    break;
-                case NSKey.I:
-                    phiddle.InfoWindowVisible = !phiddle.InfoWindowVisible;
-                    NeedsDisplay = true;
-                    break;
-                case NSKey.H:
-                    phiddle.HelpLinesVisible = !phiddle.HelpLinesVisible;
-                    NeedsDisplay = true;
-                    break;
-                case NSKey.G:
-                    phiddle.ToggleToolMarks(Core.Measure.MarkCategory.GoldenRatio);
-                    NeedsDisplay = true;
-                    break;
-                case NSKey.E:
-                    phiddle.ToggleToolMarks(Core.Measure.MarkCategory.Endpoint);
-                    NeedsDisplay = true;
-                    break;
-                case NSKey.M:
-                    phiddle.ToggleToolMarks(Core.Measure.MarkCategory.Middle);
-                    NeedsDisplay = true;
-                    break;
-                case NSKey.T:
-                    phiddle.ToggleToolMarks(Core.Measure.MarkCategory.Third);
-                    NeedsDisplay = true;
-                    break;
-                default:
-                    break;
-            }            
+                return;
+            }
+
+            var action = appInput.Keys[theEvent.KeyCode];
+            phiddle.InvokeAction(action);
+
+            if (action == ActionId.ApplicationExit)
+            {
+                Window.Close();
+            }
+            else
+            {
+                NeedsDisplay = true;
+            }
+
         }
 
         public override void MouseDown(NSEvent theEvent)
@@ -102,7 +81,6 @@ namespace Phiddle.Mac
             var pos = MousePosition.ToSKPointFlipY();
             phiddle.MouseClicked(pos);
             NeedsDisplay = true;
-            //Console.WriteLine($"Phiddle.Mac.Window.MouseDown: mouse position = {pos}");
         }
 
         public override void MouseMoved(NSEvent theEvent)
@@ -115,7 +93,6 @@ namespace Phiddle.Mac
             var pos = MousePosition.ToSKPointFlipY();
             phiddle.MouseMoved(pos);
             NeedsDisplay = true;
-            //Console.WriteLine($"Phiddle.Mac.Window.MouseMoved ({Identifier}): mouse position = {pos}");
         }
     }
 }
