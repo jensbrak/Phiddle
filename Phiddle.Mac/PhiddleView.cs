@@ -20,14 +20,16 @@ namespace Phiddle.Mac
         public PhiddleView(CGRect frame, PhiddleCore phiddle, ISettingsService<AppInput> settingsService) : base(frame)
         {
             this.phiddle = phiddle;
-            
+
+            appInput = settingsService.Settings;
+
             if (!settingsService.Loaded)
             {
                 settingsService.Settings = AppInputMac.Defaults;
                 settingsService.Save();
+                appInput = AppInputMac.Defaults;
             }
 
-            appInput = settingsService.Settings;
         }
 
         public override void PrepareOpenGL()

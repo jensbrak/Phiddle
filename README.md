@@ -1,4 +1,4 @@
-# Phiddle (v 0.2.1)
+# Phiddle (v 0.3)
 Visually minimalistic screen pixel measuring program.
 
 ## Phiddle is:
@@ -75,10 +75,11 @@ Visually minimalistic screen pixel measuring program.
 * Stability: deal with multiple screens and scaling 
 
 # History
-## 0.2.1
+## 0.3
 * Core: Settings service to load/save settings classes
 * Core: Interface slimmed down (replaced by single point for user input)
 * Mac: Key Map (normal keys only)
+* Win: Key Map (normal keys only)
 
 ## 0.2.0
 * Core: resize rect/oval in any corner

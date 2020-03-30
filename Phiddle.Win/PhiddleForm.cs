@@ -6,7 +6,9 @@ using System.Windows.Forms;
 using Microsoft.Extensions.DependencyInjection;
 using Phiddle.Core;
 using Phiddle.Core.Services;
+using Phiddle.Core.Settings;
 using Phiddle.Win.Services;
+using Phiddle.Win.Settings;
 
 namespace Phiddle.Win
 {
@@ -21,6 +23,7 @@ namespace Phiddle.Win
         private SKGLControl controlZoom;
         private PhiddleCore phiddle;
         private IScreenService screen;
+        private AppInput appInput;
         public ILoggingService Log { get; set; }
 
         public PhiddleForm()
@@ -45,12 +48,23 @@ namespace Phiddle.Win
         {
             // Create the Core, add our services and initialize Core with it
             phiddle = new PhiddleCore();
-            phiddle.ServiceCollection.AddSingleton(screen);
-            phiddle.ServiceCollection.AddSingleton<LoggingService>();
+            phiddle.Services.AddSingleton(screen);
+            phiddle.Services.AddSingleton<LoggingService>();
+            phiddle.Services.AddSingleton<SettingsService<AppInput>>();
             phiddle.Initialize();
 
-            // Get a log object from Core to use
-            Log = phiddle.ServiceProvider.GetRequiredService<LoggingService>();
+            // Get the services we need right away
+            Log = PhiddleCore.ServiceProvider.GetRequiredService<LoggingService>();
+            var settingsService = PhiddleCore.ServiceProvider.GetRequiredService<SettingsService<AppInput>>();
+
+            appInput = settingsService.Settings;
+
+            if (!settingsService.Loaded)
+            {
+                settingsService.Settings = AppInputWin.Defaults;
+                settingsService.Save();
+                appInput = AppInputWin.Defaults;
+            }
         }
 
         private void InitializeSkiaControls()
@@ -89,7 +103,6 @@ namespace Phiddle.Win
             controlZoom.PaintSurface += new EventHandler<SKPaintGLSurfaceEventArgs>(HandlePaintGLSurfaceZoom);
             Controls.Add(controlZoom);
         }
-
 
         private void HandleFormLoad(object sender, EventArgs e)
         {
@@ -130,41 +143,22 @@ namespace Phiddle.Win
 
         private void HandleKeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode)
+            var keyCode = Convert.ToUInt16(e.KeyCode);
+            if (!appInput.Keys.ContainsKey(keyCode))
             {
-                case Keys.Escape:
-                    phiddle.Stop();
-                    Close();
-                    break;
-                case Keys.Space:
-                    phiddle.SelectNextTool();
-                    break;
-                case Keys.L:
-                    phiddle.ToggleLabelPlacement();
-                    break;
-                case Keys.Z:
-                    phiddle.ZoomWindowVisible = !phiddle.ZoomWindowVisible;
-                    break;
-                case Keys.I:
-                    phiddle.InfoWindowVisible = !phiddle.InfoWindowVisible;
-                    break;
-                case Keys.H:
-                    phiddle.HelpLinesVisible = !phiddle.HelpLinesVisible;
-                    break;
-                case Keys.G:
-                    phiddle.ToggleToolMarks(Core.Measure.MarkCategory.GoldenRatio);
-                    break;
-                case Keys.E:
-                    phiddle.ToggleToolMarks(Core.Measure.MarkCategory.Endpoint);
-                    break;
-                case Keys.M:
-                    phiddle.ToggleToolMarks(Core.Measure.MarkCategory.Middle);
-                    break;
-                case Keys.T:
-                    phiddle.ToggleToolMarks(Core.Measure.MarkCategory.Third);
-                    break;
-                default:
-                    break;
+                return;
+            }
+
+            var action = appInput.Keys[keyCode];
+            phiddle.InvokeAction(action);
+
+            if (action == ActionId.ApplicationExit)
+            {
+                Close();
+            }
+            else
+            {
+                // NeedsDisplay = true;
             }
         }
 
