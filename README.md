@@ -1,4 +1,4 @@
-# Phiddle (v 0.2.0)
+# Phiddle (v 0.2.1)
 Visually minimalistic screen pixel measuring program.
 
 ## Phiddle is:
@@ -66,8 +66,7 @@ Visually minimalistic screen pixel measuring program.
 * Tool: additional tool: multiline (polygon) 
 * Tool: rotate placed tool 
 * General: multiple measurements/tools?
-* General: save state/settings
-* General: input mapping (possibility to assign keys/mouse to functionality)
+* General: input mapping (possibility to assign keys/mouse to functionality
 * Internal: clean up Phiddle.Core and other messy parts
 * Internal: better approach for Defaults (along with state/settings?)
 * Visuals: automatically move windows when measuring obscured area
@@ -76,25 +75,27 @@ Visually minimalistic screen pixel measuring program.
 * Stability: deal with multiple screens and scaling 
 
 # History
+## 0.2.1
+* Core: Settings service to load/save settings classes
+* Core: Interface slimmed down (replaced by single point for user input)
+* Mac: Key Map (normal keys only)
+
 ## 0.2.0
-* Fixed: [Mac] Cursor change appearence
-* Fixed: [Mac] Lock tool using ctrl key
-* Fixed: [Mac] Zoom seems to work now
-* Internal: [Mac] Some cleanup of code
-* Tools: resize rect/oval in any corner
-* Mac: almost fully working version for Mac
-* Tool: Oval
-* Tool mark: 1/2 and 1/3
-* Tool mark: toggle
+* Core: resize rect/oval in any corner
+* Core: new tool: Oval
+* Core: marks for 1/2 and 1/3
+* Core: toggle marks
+* Mac: almost fully working version for Mac, some issues unresolved
 * Fixed: Placement of window bottom/right is off without translate (Skiasharp Forms/Control issue?)
 * Visuals: group zoom and info windows together and make them smaller/less obscuring
 
 ## 0.1.0
-* Tool: move placed tool
-* Tool: resize placed tool
-* Info and Zoom window
-* Hide/Show windows
-* Hide/Show help lines
-* Toggle label placement
-* Line and Rect tools
-* Label
+* Core: move placed tool
+* Core: resize placed tool
+* Core: Info and Zoom window
+* Core: Hide/Show windows
+* Core: Hide/Show help lines
+* Core: Toggle label placement
+* Core: Line and Rect tools
+* Core: Label on tools
+* Win: up to date with Core
