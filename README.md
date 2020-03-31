@@ -1,16 +1,18 @@
 # Phiddle (v 0.3)
-Visually minimalistic screen pixel measuring program.
+Visually minimalistic screen pixel measuring program for PC.
+
+# Introduction
 
 ## Phiddle is:
 * Free to try or use if you want to!
 * A simple screen measuring app using basic shapes drawn on desktop
 * A playful test of SkiaSharp and more - with code to match that purpose but not more
-* A desktop app running on Windows and Mac. Kind of. But not more than that. 
+* A desktop app running on Windows and Mac. Kind of.
 
 ## Phiddle is not:
-* Fancy graphics
-* A full blown screen ruler program
+* Fancy graphics or a full blown screen ruler program
 * Supporting physical units or mobile devices
+* Well written as far as I'm concerned, code is for trying out ideas but not form basis of a real app
 * Fully functional app with installer or support
 
 ## Dependencies
@@ -18,9 +20,10 @@ Visually minimalistic screen pixel measuring program.
 * Microsoft.Extensions.DependencyInjection
 * SkiaSharp
 * SkiaSharp.Views.Desktop.Common
-* SkiaSharp.Views.WindowsForms (Windows Program)
-* SkiaSharp.Views (Mac Program)
+* SkiaSharp.Views.WindowsForms (Windows version)
+* SkiaSharp.Views (Mac version)
 
+# Instructions
 ## Features
 * Line measuring (length)
 * Rectangle measuring (width, height, area, circumferene)
@@ -29,7 +32,7 @@ Visually minimalistic screen pixel measuring program.
 * Lock to axis, golden ratio or fixed width/height ratio (depending on tool)
 * Zoom window for fine grained measuring
 
-## Instructions
+## How to use
 * Left mouse click to start measure at current mouse position
 * A second left mouse click to stop measure at current mouse position
 * Additional left mouse click:
@@ -37,7 +40,8 @@ Visually minimalistic screen pixel measuring program.
 ** If inside bounds of tool endpoint: resize tool using selected endpoint
 ** If outside bounds of tool: hide tool / clear current measurements 
 
-## Shortcuts
+## Shortcuts 
+Note: most of these can (as of 0.3.0) be edited in config file, see further down.
 * Esc: Exit program
 * Space: Toggle measuring tool (line/rect/oval)
 * H: Toggle help lines (on/off)
@@ -55,12 +59,47 @@ Visually minimalistic screen pixel measuring program.
 * Rect: lock will keep rectangle width/height aspect to golden ratio
 * Oval: lock will keep the oval width and hight equal, ie make a circle
 
+## Config files
+Located in user settings directory:
+* Mac: `Users/<name>/.config/phiddle/`
+* Win: `User and settings\<user>\AppData\Roaming\phiddle\
+
+Files and their content:
+* `phiddle.appinput.json`: Shortcuts mapping Key Codes to Phiddle Actions
+* `phiddle.appstate.json`: State of Phiddle to be used next launch
+
+For available Key Codes see:
+* Mac: NSKey enum in AppKit
+* Win: Keys enum in System.Windows.Forms
+
+Note: control keys not implemented (yet), nor any mouse related mapping
+
+# Implementation
+Really not much to it. It's a poor mans Xamarin Forms wannabe:
+* A common project for shared code (Phiddle.Core)
+* A Mac specific project with launcher for Mac
+* A Win specific project with launcher for Mac
+
+## Phiddle.Core
+* Drawing of basic UI components (`/Graphics/`)
+* Drawing of tools that measure pixels (`/Tools/`)
+* Basic settings and persistance of these (`/Settings/`)
+* DI-sort-of classes (`/Services/`)
+* Basic logic for app (root and within tool drawing)
+
+## Phiddle.Mac
+* Based on Macios/Cocoa parts of Xamarin
+* Partial implementation: leftovers from templates still there (menu and more)
+* Unclear distinction between WindowController, Window, ViewController and Views, need better understanding of Mac programming before going any further
+
+## Phiddle.Win
+* Based on Windows Forms, only way I could get transparency to desktop to work with reasonable effort
+
 # Issues and roadmap
 ## Known issues and shortcomings
 * Multiple screens don't work, currently mess up program real good
 * Lock tool works only partially, resize secondary endpoint using lock fail
 * [Mac]: Updating zoom/info window live only work when moving mouse. There's something about that refresh...
-* Code is horrible, especially on Mac :)
 
 ## Roadmap / Ideas
 * Tool: additional tool: multiline (polygon) 
