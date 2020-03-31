@@ -102,6 +102,7 @@ Really not much to it. It's a poor mans Xamarin Forms wannabe:
 * Multiple screens don't work, currently mess up program real good
 * Lock tool works only partially, resize secondary endpoint using lock fail
 * [Mac]: Updating zoom/info window live only work when moving mouse. There's something about that refresh...
+* [Mac]: Permissions required to record screen (zoom window) not accessible when app is running
 
 ## Roadmap / Ideas
 * Tool: additional tool: multiline (polygon) 
