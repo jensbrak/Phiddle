@@ -142,3 +142,32 @@ Really not much to it. It's a poor mans Xamarin Forms wannabe:
 * Core: Line and Rect tools
 * Core: Label on tools
 * Win: up to date with Core
+
+# Golden ratio, this app and the name Phiddle
+## Math is ... hard. I mean... fun!
+No matter your relation with math it's hard not to appreciate the beauty of many mathematical concepts and ideas. I have issues using math without being frustrated. Feeling my own lack of understanding limiting the fun and usability of math. Some things are just too cool to ignore. Like the Golden Ratio. In the simplest form a number: `1.61...`. If you go a little beyond that number you will find that it's more of a... way of looking at things.
+
+## Golden Ratio and measuring pixels
+One of the most well known uses of the Golden Ratio is to find harmonic relations between something "shorter" and something slightly "longer". Like the ratio of a rectangle, the relation between the short and long sides. I believe it is more commonly used as a confirmation  of that certain things has good proportions, rather than a way to actually design them that way to begin with.
+
+You'll find the Golden Ratio in artworks, in common shapes around you and you'll find it in nature. It is fun to measure things and realize how common the ratio is. This is where I wanted to do something. Did not find any good application that enabled me to measure things on the screen of my computer (from photos to UI components, you name it!).
+
+## Of course those apps exist
+Of course there are such apps. I just missed them as I was way to eager to try my own luck doing one. I'd like to point out one specific (that I happened to do a PR for by adding Golden Ratio markers): 
+
+* https://sourceforge.net/projects/screenruler/  with source here on GitHub: 
+
+Also found a couple of commercial programs that I haven't tried but seem to boast with lots of Golden Ratio related functionality. I have intentionally NOT looked at them since I didn't want to get influenced by them. They're most likely awesome and more useful than my program ever will be (or aim to be). 
+
+* http://www.markuswelz.de/software2/
+* https://www.phimatrix.com/
+
+The latter one even share parts of its name with my little app. Which is no coincidence (no, did not borrow from it) and leads me to the final note:
+
+## Phiddle
+It's just a combination of the two words "Phi" and "Fiddle". Phi is the greek letter usually representing the Golden Ratio number. Fiddle is what I wanted to do with the program. Fiddle with different software components and concepts, like SkiaSharp, Xamarin or multiplatform development and dependency injection basics. But also because as it can be used as a tool to fiddle around with on the screen, measuring things in it.
+
+End of story?
+
+
+
