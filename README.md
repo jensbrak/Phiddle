@@ -54,15 +54,15 @@ Note: most of these can (as of 0.3.0) be edited in config file, see further down
 ## Config files
 Located in user settings directory:
 * Mac: `Users/<name>/.config/phiddle/`
-* Win: `User and settings\<user>\AppData\Roaming\phiddle\
+* Win: `User and settings\<user>\AppData\Roaming\phiddle\`
 
 Files and their content:
 * `phiddle.appinput.json`: Shortcuts mapping Key Codes to Phiddle Actions
 * `phiddle.appstate.json`: State of Phiddle to be used next launch
 
 For available Key Codes see:
-* Mac: NSKey enum in AppKit
-* Win: Keys enum in System.Windows.Forms
+* Mac: `NSKey` enum in `AppKit`
+* Win: `Keys enum in System.Windows.Forms`
 
 Note: control keys not implemented (yet), nor any mouse related mapping
 
