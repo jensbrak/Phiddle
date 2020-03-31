@@ -143,7 +143,7 @@ Really not much to it. It's a poor mans Xamarin Forms wannabe:
 * Core: Label on tools
 * Win: up to date with Core
 
-# Golden ratio, this app and the name Phiddle
+# Golden ratio and this app - Bonus section
 ## Math is ... hard. I mean... fun!
 No matter your relation with math it's hard not to appreciate the beauty of many mathematical concepts and ideas. I have issues using math without being frustrated. Feeling my own lack of understanding limiting the fun and usability of math. Some things are just too cool to ignore. Like the Golden Ratio. In the simplest form a number: `1.61...`. If you go a little beyond that number you will find that it's more of a... way of looking at things.
 
@@ -155,7 +155,7 @@ You'll find the Golden Ratio in artworks, in common shapes around you and you'll
 ## Of course those apps exist
 Of course there are such apps. I just missed them as I was way to eager to try my own luck doing one. I'd like to point out one specific (that I happened to do a PR for by adding Golden Ratio markers): 
 
-* https://sourceforge.net/projects/screenruler/  with source here on GitHub: 
+* https://sourceforge.net/projects/screenruler/  with source here on GitHub: https://github.com/bluegrams/ScreenRuler
 
 Also found a couple of commercial programs that I haven't tried but seem to boast with lots of Golden Ratio related functionality. I have intentionally NOT looked at them since I didn't want to get influenced by them. They're most likely awesome and more useful than my program ever will be (or aim to be). 
 
