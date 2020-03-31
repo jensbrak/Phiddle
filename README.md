@@ -15,14 +15,6 @@ Visually minimalistic screen pixel measuring program for PC.
 * Well written as far as I'm concerned, code is for trying out ideas but not form basis of a real app
 * Fully functional app with installer or support
 
-## Dependencies
-* .NET Framework
-* Microsoft.Extensions.DependencyInjection
-* SkiaSharp
-* SkiaSharp.Views.Desktop.Common
-* SkiaSharp.Views.WindowsForms (Windows version)
-* SkiaSharp.Views (Mac version)
-
 # Instructions
 ## Features
 * Line measuring (length)
@@ -75,6 +67,15 @@ For available Key Codes see:
 Note: control keys not implemented (yet), nor any mouse related mapping
 
 # Implementation
+## Dependencies
+* .NET Framework
+* Microsoft.Extensions.DependencyInjection
+* SkiaSharp
+* SkiaSharp.Views.Desktop.Common
+* SkiaSharp.Views.WindowsForms (Windows version)
+* SkiaSharp.Views (Mac version)
+
+## General
 Really not much to it. It's a poor mans Xamarin Forms wannabe:
 * A common project for shared code (Phiddle.Core)
 * A Mac specific project with launcher for Mac
@@ -85,7 +86,8 @@ Really not much to it. It's a poor mans Xamarin Forms wannabe:
 * Drawing of tools that measure pixels (`/Tools/`)
 * Basic settings and persistance of these (`/Settings/`)
 * DI-sort-of classes (`/Services/`)
-* Basic logic for app (root and within tool drawing)
+* Helper, mainly extending SkiaSharp 2D components (`/Extensions/`)
+* Basic logic for app (`PhiddleCore.cs`, `AppTools.cs` and `AppActions.cs`)
 
 ## Phiddle.Mac
 * Based on Macios/Cocoa parts of Xamarin
