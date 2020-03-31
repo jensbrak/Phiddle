@@ -9,11 +9,11 @@ Visually minimalistic screen pixel measuring program for PC (Win/Mac).
 * A playful test of SkiaSharp and more - with code to match that purpose but not more
 * A desktop app running on Windows and Mac. Kind of.
 
-## Phiddle is not:
+## Phiddle is not (and will most likely not be):
 * Fancy graphics or a full blown screen ruler program
-* Supporting physical units or mobile devices
+* Supporting physical units (or scaling/DPI-awareness) or multiple screens 
 * Well written as far as I'm concerned, code is for trying out ideas but not form basis of a real app
-* Fully functional app with installer or support
+* Mobile app
 
 # Instructions
 ## Features
