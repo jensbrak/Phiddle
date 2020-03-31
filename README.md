@@ -106,15 +106,16 @@ Really not much to it. It's a poor mans Xamarin Forms wannabe:
 
 ## Roadmap / Ideas
 * Tool: additional tool: multiline (polygon) 
-* Tool: rotate placed tool 
-* General: multiple measurements/tools?
+* Tool: rotate placed tool
+* Tool: measure angle (maybe combined with rotation?)
+* General: multiple measurements/tools (ie several objects on screen, not one only)?
 * General: input mapping (possibility to assign keys/mouse to functionality
 * Internal: clean up Phiddle.Core and other messy parts
-* Internal: better approach for Defaults (along with state/settings?)
+* Internal: better approach for Defaults (move to settings and persist)
 * Visuals: automatically move windows when measuring obscured area
 * Visuals: window placement in any corner as per settings
-* Visuals: show major/minor marks as per settings (Mark.pos as function instead of constants?)
-* Stability: deal with multiple screens and scaling 
+* Visuals: show major/minor marks (Mark.pos as function instead of constants?)
+* Stability: deal with multiple screens and scaling/DPI
 
 # History
 ## 0.3
