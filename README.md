@@ -1,5 +1,5 @@
 # Phiddle (v 0.3)
-Visually minimalistic screen pixel measuring program for PC.
+Visually minimalistic screen pixel measuring program for PC (Win/Mac).
 
 # Introduction
 
