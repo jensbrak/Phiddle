@@ -7,13 +7,14 @@
     <Authors>JensB</Authors>
     <Copyright>JensB</Copyright>
     <PackageProjectUrl>geek.zon3.se</PackageProjectUrl>
+    <ReleaseVersion>0.4.0.1</ReleaseVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SkiaSharp" Version="1.68.2-preview.43" />
-    <PackageReference Include="SkiaSharp.Views.Desktop.Common" Version="1.68.2-preview.43" />
+    <PackageReference Include="SkiaSharp" Version="1.68.3" />
+    <PackageReference Include="SkiaSharp.Views.Desktop.Common" Version="1.68.3" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.4" />
     <PackageReference Include="Utf8Json" Version="1.3.7" />
   </ItemGroup>
 

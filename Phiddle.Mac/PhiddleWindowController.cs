@@ -13,6 +13,7 @@ using Phiddle.Mac.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.InteropServices;
 using Phiddle.Core.Settings;
+using Phiddle.Mac.Settings;
 
 namespace Phiddle.Mac
 {
@@ -64,7 +65,7 @@ namespace Phiddle.Mac
 			phiddle = new PhiddleCore();
 			screen = new ScreenServiceMac(Window);
 			phiddle.Services.AddSingleton(screen);
-			phiddle.Services.AddSingleton<SettingsService<AppInput<NSKey>>>();
+			phiddle.Services.AddSingleton<SettingsService<AppInputMac>>();
 
 			phiddle.Initialize();
 			Window.Phiddle = phiddle;
@@ -73,7 +74,7 @@ namespace Phiddle.Mac
 		private void InitializePhiddleViews()
         {
 			log = PhiddleCore.ServiceProvider.GetRequiredService<ILogService>();
-			var appInputService = PhiddleCore.ServiceProvider.GetRequiredService<SettingsService<AppInput<NSKey>>>();
+			var appInputService = PhiddleCore.ServiceProvider.GetRequiredService<SettingsService<AppInputMac>>();
 			var frame = NSScreen.MainScreen.Frame;
             var viewTool = new PhiddleView(frame, phiddle, appInputService, log)
             {

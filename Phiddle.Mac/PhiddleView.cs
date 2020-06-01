@@ -19,7 +19,7 @@ namespace Phiddle.Mac
 
         public CGPoint MousePosition { get; set; }
 
-        public PhiddleView(CGRect frame, PhiddleCore phiddle, ISettingsService<AppInput<NSKey>> settingsService, ILogService log) : base(frame)
+        public PhiddleView(CGRect frame, PhiddleCore phiddle, ISettingsService<AppInputMac> settingsService, ILogService log) : base(frame)
         {
             this.log = log;
             this.phiddle = phiddle;
