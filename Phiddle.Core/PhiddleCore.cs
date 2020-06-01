@@ -9,6 +9,7 @@ using System;
 using System.Timers;
 using System.IO;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Phiddle.Core
 {
@@ -47,16 +48,28 @@ namespace Phiddle.Core
     /// <item>Tool passive and mouse between endpoint bounds (either one of them): start resizing at selected endpoint </item>
     /// </list>
     /// </summary>
-    public class PhiddleCore : IDisposable
+    public class PhiddleCore 
     {
+        // Services to use for Core
+        private ILogService logService;
+        private IScreenService screenService;
+        private ISettingsService<AppState> appStateService;
+        private ISettingsService<AppSettings> appSettingsService;
+
+        // Refresh timer
         private Timer timer;
 
-        private WindowBase windowTool;
-        private WindowInfo windowInfo;
-        private WindowZoom windowZoom;
-        private AppTools toolSet;
-        private AppActions actions;
+        // UI components
         private HelpLines helpLines;
+        private Window windowApp;
+        private WindowTextInfo windowInfo;
+        private WindowZoom windowZoom;
+
+        // The available tools and actions
+        private AppTools appTools;
+        private AppActions appActions;
+
+        // State
         private SKPoint lastPos;
 
         /// <summary>
@@ -68,11 +81,11 @@ namespace Phiddle.Core
         {
             get
             {
-                return toolSet.SelectedTool.Locked;
+                return appTools.ActiveTool.Locked;
             }
             set
             {
-                toolSet.SelectedTool.Locked = value;
+                appTools.ActiveTool.Locked = value;
             }
         }
 
@@ -89,15 +102,6 @@ namespace Phiddle.Core
         /// </summary>
         public static IServiceProvider ServiceProvider { get; private set; }
 
-        /// <summary>
-        /// Phiddle Core logging instance.
-        /// </summary>
-        public ILoggingService Log { get; private set; }
-
-        /// <summary>
-        /// Screen service instance.
-        /// </summary>
-        public IScreenService Screen { get; private set; }
 
         #endregion
 
@@ -108,9 +112,9 @@ namespace Phiddle.Core
         /// Example: a screen height 1200 and a factor of 6 will make any window
         /// 200 in height.
         /// </summary>
-        public float WindowsSizeFactor { get; set; } = Defaults.WindowsSizeFactor;
+        public float WindowsSizeFactor { get; set; }
 
-        public float WindowZoomFactor { get; set; } = Defaults.WindowZoomFactor;
+        public float WindowZoomFactor { get; set; }
 
         public SKPoint ZoomWindowLocation { get; set; }
 
@@ -121,7 +125,7 @@ namespace Phiddle.Core
         { 
             get
             {
-                var screen = Screen.Dimensions();
+                var screen = screenService.Dimensions();
                 var ratio = (float)screen.Width / screen.Height;
                 var zw = screen.Width / (WindowsSizeFactor * ratio);
                 var zh = screen.Height / WindowsSizeFactor;
@@ -139,7 +143,7 @@ namespace Phiddle.Core
         {
             get
             {
-                var screen = Screen.Dimensions();
+                var screen = screenService.Dimensions();
                 var ratio = (float)screen.Width / screen.Height;
                 var iw = screen.Width / (WindowsSizeFactor * ratio);
                 var ih = screen.Height / WindowsSizeFactor;
@@ -157,7 +161,7 @@ namespace Phiddle.Core
         {
             get
             {
-                var td = Screen.Dimensions();
+                var td = screenService.Dimensions();
                 var size = new SKSize(td.Width, td.Height);
                 return size;
             }
@@ -186,34 +190,50 @@ namespace Phiddle.Core
             // Setup services            
             InitializeServices(Services);
             ServiceProvider = Services.BuildServiceProvider();
-            Screen = ServiceProvider.GetRequiredService<IScreenService>();
-            Log = ServiceProvider.GetRequiredService<ILoggingService>();
+            screenService = ServiceProvider.GetRequiredService<IScreenService>();
+            logService = ServiceProvider.GetRequiredService<ILogService>();
+
+            appSettingsService = ServiceProvider.GetRequiredService<SettingsService<AppSettings>>();
+            appStateService = ServiceProvider.GetRequiredService<SettingsService<AppState>>();
 
             // Actions
-            actions = InitializeActions();
+            appActions = InitializeActions();
 
-            // Create tools
-            var appState = ServiceProvider.GetRequiredService<SettingsService<AppState>>();
-            toolSet = new AppTools(appState);
+            // Tools
+            appTools = new AppTools(appStateService.Settings, appSettingsService.Settings);
+            helpLines = new HelpLines(screenService.Dimensions(), appStateService.Settings, appSettingsService.Settings.PaintHelpLines);
 
-            // Create UI components
+            WindowsSizeFactor = appSettingsService.Settings.WindowSizeFactor;
+            WindowZoomFactor = appSettingsService.Settings.WindowZoomFactor;
+
+            // Windows
+            windowApp = new Window(SKPoint.Empty, ToolWindowSize, appSettingsService.Settings.WindowApp);
+            windowInfo = new WindowTextInfo(SKPoint.Empty, InfoWindowSize, appSettingsService.Settings.WindowInfo); 
+            windowZoom = new WindowZoom(SKPoint.Empty, ZoomWindowSize, appSettingsService.Settings.WindowZoom) 
+            { 
+                CrosshairVisible = !helpLines.Visible }
+            ;
+
+            // Calculate initial locations of windows with relative positions
+            var s = screenService.Dimensions();
 #if DEBUG
-            windowTool = new WindowBase(ToolWindowSize.CombineWith(ToolWindowLocation));
+            var wm = appSettingsService.Settings.WindowMargin + windowApp.PaintBorder.StrokeWidth;
+#else
+            var wm = appSettingsService.Settings.WindowMargin;
 #endif
-            helpLines = new HelpLines(Screen.Dimensions());
-            windowInfo = new WindowInfo(InfoWindowSize.CombineWith(InfoWindowLocation)); 
-            windowZoom = new WindowZoom(ZoomWindowSize.CombineWith(ZoomWindowLocation)) { CrosshairVisible = !helpLines.Visible };
+            var zx = s.Right - windowZoom.Bounds.Width - wm * 2;
+            var zy = s.Bottom - windowZoom.Bounds.Height - wm * 2;
+            ZoomWindowLocation = new SKPoint(zx, zy);
 
-            // Calculate initial locations of UI components
-            var s = Screen.Dimensions();
-            ZoomWindowLocation = new SKPoint(s.Right - windowZoom.Bounds.Width - 4, s.Bottom - windowZoom.Bounds.Height - 4);
-            InfoWindowLocation = new SKPoint(s.Right - windowInfo.Bounds.Width - 4, s.Bottom - windowInfo.Bounds.Height - windowZoom.Bounds.Height - 7);
+            var ix = s.Right - windowInfo.Bounds.Width - wm * 2;
+            var iy = s.Bottom - windowInfo.Bounds.Height - windowZoom.Bounds.Height - wm * 4;
+            InfoWindowLocation = new SKPoint(ix, iy);
 
             // Setup refresh timer
             timer = new Timer(50) { AutoReset = true };
             timer.Elapsed += new ElapsedEventHandler(TimerElapsed);
 
-            Log.Debug("Initialize", $"Core initialized with refresh rate = {1000 / timer.Interval:0} FPS");
+            logService.Debug("Initialize", $"Core initialized with refresh rate = {1000 / timer.Interval:0} FPS");
         }
 
         /// <summary>
@@ -221,36 +241,34 @@ namespace Phiddle.Core
         /// Note: Phiddle will currently run without being started but the Zoom Window 
         /// will not be updated if not.
         /// </summary>
-        public void Start()
+        public void StartUp()
         {
-            // Initial update
-            //var pos = Screen.MousePosition();
-            //UpdateInfoWindow(pos);
-            //UpdateZoomWindow(pos);
-
             timer.Start();
-            Log.Debug("Start", "Core running");
+            logService.Debug("StartUp", "Core running");
         }
 
         /// <summary>
         /// Stop Phiddle Core.
         /// </summary>
-        public void Stop()
+        public void ShutDown()
         {
-            timer.Stop();
-            Log.Debug("Exit", "Core stopped");
-        }
+            appStateService.Settings.HelpLinesVisible = helpLines.Visible;
+            appStateService.Settings.WindowInfoVisible = windowInfo.Visible;
+            appStateService.Settings.WindowZoomVisible = windowZoom.Visible;
+            appStateService.Settings.ActiveTool = appTools.ActiveTool.ToolId;
+            appStateService.Settings.LabelLocation = appTools.LabelLocation; 
+            appStateService.Settings.MarksVisible = appTools.MarksVisible;
+            appStateService.Save();
 
-        public void Dispose()
-        {
-            toolSet.Dispose();
+            timer.Stop();
+            logService.Debug("ShutDown", "Core stopped");
         }
 
         #endregion
 
         #region User Input
 
-        public void InvokeAction(ActionId actionId) => actions.Invoke(actionId);
+        public void InvokeAction(ActionId actionId) => appActions.Invoke(actionId);
 
         /// <summary>
         /// Update Phiddle Core with a mouse position <paramref name="p"/>
@@ -263,27 +281,27 @@ namespace Phiddle.Core
             helpLines.Pos = p;
 
             // Nothing else to update?
-            if (!toolSet.SelectedTool.Visible)
+            if (!appTools.ActiveTool.Visible)
             {
                 return;
             }
 
             // Update tool with new mouse position. Effect of new position depends on tool state
-            if (toolSet.SelectedTool.Resizing)
+            if (appTools.ActiveTool.Resizing)
             {
-                Screen.MouseState = MouseState.Normal;
-                toolSet.SelectedTool.Resize(p);
+                screenService.MouseState = MouseState.Normal;
+                appTools.ActiveTool.Resize(p);
             }
-            else if (toolSet.SelectedTool.Moving)
+            else if (appTools.ActiveTool.Moving)
             {
-                Screen.MouseState = MouseState.Moving;
-                toolSet.SelectedTool.Move(p - lastPos);
+                screenService.MouseState = MouseState.Moving;
+                appTools.ActiveTool.Move(p - lastPos);
             }
             else
             {
                 // We have a visible but 'passive' tool. Check position against tool bounds and update cursor
-                toolSet.SelectedTool.CheckBounds(p);
-                Screen.MouseState = toolSet.SelectedTool.Movable || toolSet.SelectedTool.Resizable ? MouseState.CanGrip : MouseState.Normal;
+                appTools.ActiveTool.CheckBounds(p);
+                screenService.MouseState = appTools.ActiveTool.Movable || appTools.ActiveTool.Resizable ? MouseState.CanGrip : MouseState.Normal;
             }
 
             // Store pos for next round
@@ -297,7 +315,7 @@ namespace Phiddle.Core
         public void MouseClicked(SKPoint p)
         {
             // Let tool decide what mouse click means and update itself
-            toolSet.SelectedTool.NextAction(p);
+            appTools.ActiveTool.NextAction(p);
         }
 
         #endregion
@@ -313,9 +331,9 @@ namespace Phiddle.Core
             helpLines.Draw(c);
 
 #if DEBUG
-            windowTool.Draw(c);
+            windowApp.Draw(c);
 #endif
-            toolSet.SelectedTool.Draw(c);
+            appTools.ActiveTool.Draw(c);
         }
 
         /// <summary>
@@ -361,12 +379,12 @@ namespace Phiddle.Core
             var rect = new SKRectI(x, y, x + (int)w, y + (int)h);
 
             // Perform the capture and update zoom window with it
-            var screenshot = Screen.Capture(rect);
+            var screenshot = screenService.Capture(rect);
             windowZoom.UpdateZoom(screenshot, WindowZoomFactor);
 
             // Request repaint of zoom window by using any point within it
             var invalidateAtPos = new SKPointI((int)ZoomWindowLocation.X + 1, (int)ZoomWindowLocation.Y + 1);
-            Screen.Invalidate(invalidateAtPos);
+            screenService.Invalidate(invalidateAtPos);
         }
 
         /// <summary>
@@ -375,12 +393,12 @@ namespace Phiddle.Core
         /// <param name="p">New mouse position to show</param>
         private void UpdateInfoWindow(SKPoint p)
         {
-            windowInfo.ReportSelectedTool(toolSet.SelectedTool);
+            windowInfo.ReportSelectedTool(appTools.ActiveTool);
             windowInfo.ReportMousePosition(p);
-            windowInfo.ReportLabelPlacement(toolSet.SelectedTool);
-            windowInfo.ReportMeasurements(toolSet.SelectedTool);
+            windowInfo.ReportLabelPlacement(appTools.ActiveTool);
+            windowInfo.ReportMeasurements(appTools.ActiveTool);
             var invalidateAtPos = new SKPointI((int)InfoWindowLocation.X + 1, (int)InfoWindowLocation.Y + 1);
-            Screen.Invalidate(invalidateAtPos);
+            screenService.Invalidate(invalidateAtPos);
         }
 
         /// <summary>
@@ -392,7 +410,9 @@ namespace Phiddle.Core
         private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
             // Zoom at mousepos, unless we're resizing a locked tool. If so: get locked position of tool
-            var zoomAtPos = toolSet.SelectedTool.Resizing ? toolSet.SelectedTool.ActiveEndpoint.Pos : Screen.MousePosition();
+            var zoomAtPos = appTools.ActiveTool.Resizing 
+                ? appTools.ActiveTool.ActiveEndpoint.Pos 
+                : screenService.MousePosition();
             UpdateZoomWindow(zoomAtPos);
         }
 
@@ -402,27 +422,28 @@ namespace Phiddle.Core
 
         private void InitializeServices(IServiceCollection services)
         {
-            services.AddSingleton<ILoggingService, LoggingServiceConsole>();
+            services.AddSingleton<ILogService, LogServiceConsole>();
             services.AddSingleton<SettingsService<AppState>>();
+            services.AddSingleton<SettingsService<AppSettings>>();
         }
 
         private AppActions InitializeActions()
         {
-            var actions = new Dictionary<ActionId, ActionDelegate>(Enum.GetValues(typeof(ActionId)).Length)
+            var phiddleActions = new Dictionary<ActionId, ActionDelegate>(Enum.GetValues(typeof(ActionId)).Length)
             {
-                { ActionId.ApplicationExit, () => { Stop(); Dispose(); } },
-                { ActionId.HelpLinesToggleVisible, () => { helpLines.Visible = !helpLines.Visible; windowZoom.CrosshairVisible = !windowZoom.CrosshairVisible; windowZoom.CrosshairVisible = !windowZoom.CrosshairVisible ; } },
-                { ActionId.LabelTogglePlacement, () => toolSet.ToggleLabelPlacement() },
-                { ActionId.ToolMarksGoldenRatioToggleVisible, () => toolSet.ToggleToolMarks(MarkCategory.GoldenRatio) },
-                { ActionId.ToolMarksEndpointToggleVisible, () => toolSet.ToggleToolMarks(MarkCategory.Endpoint) },
-                { ActionId.ToolMarksMiddleToggleVisible, () => toolSet.ToggleToolMarks(MarkCategory.Middle) },
-                { ActionId.ToolMarksThirdToggleVisible, () => toolSet.ToggleToolMarks(MarkCategory.Third) },
-                { ActionId.ToolSelectNext, () => { toolSet.SelectNextTool(); windowInfo.ReportSelectedTool(toolSet.SelectedTool); windowInfo.ReportMeasurements(toolSet.SelectedTool);} },
+                { ActionId.ApplicationExit, () => ShutDown()},
+                { ActionId.HelpLinesToggleVisible, () => { helpLines.Visible = !helpLines.Visible; windowZoom.CrosshairVisible = !helpLines.Visible; } },
+                { ActionId.LabelTogglePlacement, () => appTools.ToggleLabelPlacement() },
+                { ActionId.ToolMarksGoldenRatioToggleVisible, () => appTools.ToggleToolMarksVisibility(MarkId.Phi) },
+                { ActionId.ToolMarksEndpointToggleVisible, () => appTools.ToggleToolMarksVisibility(MarkId.Endpoint) },
+                { ActionId.ToolMarksMiddleToggleVisible, () => appTools.ToggleToolMarksVisibility(MarkId.Middle) },
+                { ActionId.ToolMarksThirdToggleVisible, () => appTools.ToggleToolMarksVisibility(MarkId.Third) },
+                { ActionId.ToolSelectNext, () => { appTools.SelectNextTool(); windowInfo.ReportSelectedTool(appTools.ActiveTool); windowInfo.ReportMeasurements(appTools.ActiveTool);} },
                 { ActionId.WindowInfoToggleVisible, () => windowInfo.Visible = !windowInfo.Visible },
                 { ActionId.WindowZoomToggleVisible, () => { windowZoom.Visible = !windowZoom.Visible;if (windowZoom.Visible) timer.Start(); else timer.Stop();}},
             };
 
-            return new AppActions() { Actions = actions };
+            return new AppActions() { Actions = phiddleActions };
         }
 
         #endregion

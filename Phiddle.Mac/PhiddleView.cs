@@ -6,28 +6,29 @@ using Phiddle.Core.Services;
 using Phiddle.Mac.Extensions;
 using Phiddle.Mac.Settings;
 using SkiaSharp.Views.Mac;
+using System;
 
 namespace Phiddle.Mac
 {
     public class PhiddleView : SKGLView
     {
-        private readonly AppInput appInput;
+        private readonly ILogService log;
+        private readonly AppInput<NSKey> appInput;
         private readonly PhiddleCore phiddle;
         private NSTrackingArea trackingArea;
 
         public CGPoint MousePosition { get; set; }
 
-        public PhiddleView(CGRect frame, PhiddleCore phiddle, ISettingsService<AppInput> settingsService) : base(frame)
+        public PhiddleView(CGRect frame, PhiddleCore phiddle, ISettingsService<AppInput<NSKey>> settingsService, ILogService log) : base(frame)
         {
+            this.log = log;
             this.phiddle = phiddle;
-
+            
             appInput = settingsService.Settings;
 
             if (!settingsService.Loaded)
             {
-                settingsService.Settings = AppInputMac.Defaults;
-                settingsService.Save();
-                appInput = AppInputMac.Defaults;
+                log.Warning("PhiddleView", "Could not load settings for App Input, using defaults");
             }
 
         }
@@ -58,12 +59,12 @@ namespace Phiddle.Mac
 
         public override void KeyDown(NSEvent theEvent)
         {
-            if (!appInput.Keys.ContainsKey(theEvent.KeyCode))
+            if (!appInput.InputMap.ContainsKey(theEvent.KeyCode))
             {
                 return;
             }
 
-            var action = appInput.Keys[theEvent.KeyCode];
+            var action = appInput.InputMap[theEvent.KeyCode];
             phiddle.InvokeAction(action);
 
             if (action == ActionId.ApplicationExit)

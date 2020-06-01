@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using SkiaSharp;
 
 namespace Phiddle.Core.Extensions
@@ -108,15 +109,14 @@ namespace Phiddle.Core.Extensions
             return top <= p.Y && left <= p.X && bottom >= p.Y && right >= p.X;
         }
 
+        public static SKSize Adjust(this SKSize s, float x, float y)
+        {
+            return new SKSize(s.Width + x, s.Height + y);
+        }
 
         public static SKRect CombineWith(this SKSize s, SKPoint p)
         {
             return new SKRect(p.X, p.Y, p.X + s.Width, p.Y + s.Height);
-        }
-
-        public static void Debug(this SKRect r)
-        {
-            Console.WriteLine($">>> L={r.Left:0.000000}, T={r.Top:0.000000}, R={r.Right:0.000000}, B={r.Bottom:0.000000}");
         }
     }
 }

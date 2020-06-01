@@ -18,11 +18,12 @@ namespace Phiddle.Mac
 {
 	public class PhiddleWindowController : NSWindowController
 	{
+		private IScreenService screen;
+		private ILogService log;
 
-        public new PhiddleWindow Window { get; private set; }
+		public new PhiddleWindow Window { get; private set; }
 
         private PhiddleCore phiddle;
-        private IScreenService  screen;
 		
 		public PhiddleWindowController() : base()
 		{
@@ -63,7 +64,7 @@ namespace Phiddle.Mac
 			phiddle = new PhiddleCore();
 			screen = new ScreenServiceMac(Window);
 			phiddle.Services.AddSingleton(screen);
-			phiddle.Services.AddSingleton<SettingsService<AppInput>>();
+			phiddle.Services.AddSingleton<SettingsService<AppInput<NSKey>>>();
 
 			phiddle.Initialize();
 			Window.Phiddle = phiddle;
@@ -71,9 +72,10 @@ namespace Phiddle.Mac
 
 		private void InitializePhiddleViews()
         {
-			var appInputService = PhiddleCore.ServiceProvider.GetRequiredService<SettingsService<AppInput>>();
+			log = PhiddleCore.ServiceProvider.GetRequiredService<ILogService>();
+			var appInputService = PhiddleCore.ServiceProvider.GetRequiredService<SettingsService<AppInput<NSKey>>>();
 			var frame = NSScreen.MainScreen.Frame;
-            var viewTool = new PhiddleView(frame, phiddle, appInputService)
+            var viewTool = new PhiddleView(frame, phiddle, appInputService, log)
             {
                 Identifier = "ViewTool"
             };
@@ -85,7 +87,7 @@ namespace Phiddle.Mac
 			var ib = phiddle.InfoWindowSize.ToCGSize();
 			var viewRectInfo = new CGRect(il.X, il.Y - ib.Height, ib.Width, ib.Height);
 
-            var viewInfo = new PhiddleView(viewRectInfo, phiddle, appInputService)
+            var viewInfo = new PhiddleView(viewRectInfo, phiddle, appInputService, log)
             {
                 Identifier = "ViewInfo"
             };
@@ -96,7 +98,7 @@ namespace Phiddle.Mac
 			var zb = phiddle.ZoomWindowSize.ToCGSize();
 			var viewRectZoom = new CGRect(zl.X, zl.Y - zb.Height, zb.Width, zb.Height);
 
-            var viewZoom = new PhiddleView(viewRectZoom, phiddle, appInputService)
+            var viewZoom = new PhiddleView(viewRectZoom, phiddle, appInputService, log)
             {
                 Identifier = "ViewZoom"
             };

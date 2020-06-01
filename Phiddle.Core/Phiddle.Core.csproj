@@ -3,6 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>PhiddleCore</AssemblyName>
+    <Version>0.4.0</Version>
+    <Authors>JensB</Authors>
+    <Copyright>JensB</Copyright>
+    <PackageProjectUrl>geek.zon3.se</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,10 +15,6 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.2" />
     <PackageReference Include="Utf8Json" Version="1.3.7" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Settings\" />
   </ItemGroup>
 
   <ItemGroup>

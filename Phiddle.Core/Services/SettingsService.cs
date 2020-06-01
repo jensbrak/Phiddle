@@ -2,14 +2,17 @@
 using System.IO;
 using Phiddle.Core.Settings;
 using Utf8Json;
+using Utf8Json.Resolvers;
 
 namespace Phiddle.Core.Services
 {
     public class SettingsService<T> : ISettingsService<T> where T : new()
     {
         private T settings;
-        private readonly string fileName;
+        private readonly string settingsName;
+        private readonly string settingsFile;
         private readonly string settingsPath;
+        private readonly ILogService log;
 
         public T Settings
         {
@@ -29,20 +32,25 @@ namespace Phiddle.Core.Services
         }
 
         public bool Loaded { get; private set; }
+        public bool IsDefault { get; private set; }
 
-        public SettingsService()
+        public SettingsService(ILogService log)
         {
+            this.log = log;
+
             try
             {
                 Loaded = false;
+                IsDefault = false;
                 var appName = Constants.AppName.ToLower();
-                fileName = appName + "." + typeof(T).Name.ToString().ToLower() + ".json";
+                settingsName = typeof(T).Name.ToString().ToLower();
+                settingsFile = appName + "." + settingsName + ".json";
                 var appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                 settingsPath = Path.Combine(appDataFolder, appName);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                log.Error("SettingsService", $"{settingsName}: failed to setup service", ex);
             }
         }
 
@@ -51,32 +59,37 @@ namespace Phiddle.Core.Services
             if (!Directory.Exists(settingsPath))
             {
                 Directory.CreateDirectory(settingsPath);
+                log.Debug("SettingsService.Save", $"{settingsName}: settings directory created: {settingsPath}");
             }
 
             var jsonBytes = JsonSerializer.Serialize(settings);
             var json = JsonSerializer.PrettyPrint(jsonBytes);
-            var fullPath = Path.Combine(settingsPath, fileName);
-            File.WriteAllText(fullPath, json);
+            var filePath = Path.Combine(settingsPath, settingsFile);
+            File.WriteAllText(filePath, json);
+            log.Debug("SettingsService.Save", $"{settingsName}: settings file saved: {filePath}");
         }
 
         public void Load()
         {
-            var filePath = Path.Combine(settingsPath, fileName);
-            var fileExists = File.Exists(filePath);
+            var filePath = Path.Combine(settingsPath, settingsFile);
 
-            if (fileExists)
+            if (File.Exists(filePath))
             {
                 var json = File.ReadAllText(filePath);
                 settings = JsonSerializer.Deserialize<T>(json);
                 Loaded = true;
+                log.Debug("SettingsService.Load", $"Settings file loaded: {filePath}");
+
             }
             else
             {
-                // First time load, try to get defaults but indicate nothing loaded
+                // First time load, use defaults
                 settings = new T();
                 Save();
-                Loaded = false;
+                Loaded = true;
+                IsDefault = true;
+                log.Debug("SettingsService.Load", $"{settingsName}: default settings used");
             }
-        }
+        }        
     }
 }

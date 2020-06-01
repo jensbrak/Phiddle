@@ -1,10 +1,11 @@
 ﻿using Phiddle.Core.Extensions;
+using Phiddle.Core.Settings;
 using SkiaSharp;
 using System;
 
 namespace Phiddle.Core.Graphics
 {
-    public class WindowText : WindowBase
+    public class WindowText : Window
     {
         private float[] tabStops;
         public float[] TabStops
@@ -33,15 +34,13 @@ namespace Phiddle.Core.Graphics
             }
         }
         public string[] Lines { get; set; }
-        public SKPaint PaintLines { get; set; } = Defaults.WindowBasePaintText;
+        public SKPaint PaintLines { get; set; }
 
-        public WindowText(SKRect bounds) : base(bounds)
+        public WindowText(SKPoint pos, SKSize size, SettingsWindowText settings) : base(pos, size, settings)
         {
-            PaintBorder = Defaults.WindowBasePaintBorder;
-            PaintBackground =  Defaults.WindowBasePaintBackground;
+            PaintLines = settings.PaintBorder.ToSKPaint();
             tabStops = new float[] { 10f }; // Left margin
             Visible = true;
-            Transparent = false;
         }
 
         public override void Draw(SKCanvas c)
@@ -60,7 +59,6 @@ namespace Phiddle.Core.Graphics
             {
                 return;
             }
-
 
             // Margins and padding - move to defaults/settings later on
             var xPad = 10f;
@@ -99,7 +97,7 @@ namespace Phiddle.Core.Graphics
                     // Match column text and tab stop
                     var text = columns[i];
                     var xPos = tabStops[i] + (i > 0 ? xPad : 0);
-                    c.DrawText(text, xPos, yPos, PaintLines);
+                    c.DrawText(text, xPos, yPos, PaintText);
                 }
                 
                 // Any left over columns joined together; either because it's the last column or we're out of tab stops
@@ -109,7 +107,7 @@ namespace Phiddle.Core.Graphics
                     var count = columns.Length - i;
                     var text = string.Join(" ", columns,startIndex, count);
                     var xPos = tabStops[startIndex] + (i > 0 ? xPad : 0);
-                    c.DrawText(text, xPos, yPos, PaintLines);
+                    c.DrawText(text, xPos, yPos, PaintText);
                 }
 
                 // Prepare for next line

@@ -2,9 +2,9 @@
 
 namespace Phiddle.Core.Services
 {
-    public interface ILoggingService
+    public interface ILogService
     {
-        string Owner { get; set; }
+        string Source { get; set; }
         void Info(string source, string message);
         void Debug(string source, string message);
         void Warning(string source, string message);

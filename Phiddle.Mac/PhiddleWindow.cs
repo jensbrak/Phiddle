@@ -72,7 +72,7 @@ namespace Phiddle.Mac
         {
             base.AwakeFromNib();
             ContentView.AwakeFromNib();
-            Phiddle.Start();
+            Phiddle.StartUp();
         }
 
     }

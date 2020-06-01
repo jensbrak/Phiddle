@@ -2,11 +2,11 @@
 
 namespace Phiddle.Win.Services
 {
-    public class LoggingService : LoggingServiceConsole
+    public class LoggingService : LogServiceConsole
     {
         public LoggingService()
         {
-            Owner = "Phiddle.Win";
+            Source = "Phiddle.Win";
         }
     }
 }

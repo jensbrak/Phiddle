@@ -3,33 +3,23 @@ using System;
 using Phiddle.Core.Extensions;
 using Phiddle.Core.Graphics;
 using System.Collections.Generic;
+using Phiddle.Core.Settings;
 
 namespace Phiddle.Core.Measure
 {
-    public class ToolLine : ToolBase
+    public class ToolLine : Tool
     {
-        protected override MarkBase[] DefaultMarks()
+        public ToolLine(SettingsTool settingsTool) : base(settingsTool)
         {
-            return new MarkBase[]
-            {
-                new MarkEndpoint(),
-                new MarkGoldenRatio(),
-                new MarkMiddle(),
-                new MarkThird(),
-            };
-        }
+            CreateMarks(settingsTool, MarkId.Endpoint | MarkId.Middle | MarkId.Third | MarkId.Phi);
 
-        public ToolLine() : base()
-        {
+            ToolId = ToolId.Line;
             // Important to set position and text after constructor call
 #pragma warning disable IDE0017 // Simplify object initialization
-            Label = new Label(new SKPoint(), string.Empty);
+            Label = new Label(new SKPoint(), string.Empty, settingsTool.Label);
 #pragma warning restore IDE0017 // Simplify object initialization
             Label.Text = GetLabelText();
             Label.Pos = GetLabelPos();
-            
-            // Rectangle marks
-            marks = DefaultMarks();
 
             // Show two endpoints
             p0.Visible = true;
@@ -49,7 +39,7 @@ namespace Phiddle.Core.Measure
             DrawMarks(c);
 
             // Draw basics
-            DrawBase(c);
+            DrawGenericVisuals(c);
         }
 
         public override Dictionary<Measurement, float> GetMeasurements()
@@ -94,8 +84,11 @@ namespace Phiddle.Core.Measure
 
         protected override SKPoint GetLockedPos(SKPoint p)
         {
+            // pP is the passive endpoint, ie is diagonal to the endpoint being moved
+            var pA = DiagonalToActiveEndpoint.Pos;
+
             // Get line as a vector relative to new position p
-            var v = p - p0.Pos;
+            var v = p - pA;
             // Shortest axis is closest axis to lock on to, 1 is use it, 0 if not
             var dx = Math.Abs(v.X) < Math.Abs(v.Y) ? 1f : 0f;
             var dy = 1f - dx;
@@ -133,10 +126,6 @@ namespace Phiddle.Core.Measure
                     c.DrawLine(pos + m0, pos + m1, mark.PaintMark);
                 }
             }
-        }
-        public override string ToString()
-        {
-            return "Line";
         }
     }
 }

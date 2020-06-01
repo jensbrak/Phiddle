@@ -1,6 +1,7 @@
 ﻿using Phiddle.Core.Graphics;
 using Phiddle.Core.Services;
 using SkiaSharp;
+using Phiddle.Core.Settings;
 
 namespace Phiddle.Core.Measure
 {
@@ -26,12 +27,12 @@ namespace Phiddle.Core.Measure
         public bool Visible { get; set; }
         public bool Focused { get; set; }
         public SKPoint Pos { get; set; }
-        public Endpoint(SKPoint p)
+        public Endpoint(SKPoint p, SettingsTool settings)
         {
             Visible = false;
             Pos = p;
-            Size = Defaults.ToolEndpointSize;
-            PaintGrip = Defaults.ToolBasePaintEndpoint;
+            Size = settings.SizeEndpoint;
+            PaintGrip = settings.PaintEndpoint.ToSKPaint(); 
         }
         public void CheckBounds(SKPoint p)
         {

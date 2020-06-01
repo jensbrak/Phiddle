@@ -1,23 +1,26 @@
 ﻿using SkiaSharp;
+using Phiddle.Core.Settings;
 
 namespace Phiddle.Core.Graphics
 {
-    public class WindowZoom : WindowBase
+    public class WindowZoom : Window
     {
         private SKImage screenshot;
         private float zoomFactor;
 
         public bool CrosshairVisible { get; set; }
-        public float CrosshairSize { get; set; } = Defaults.WindowZoomCrosshairSize;
-        public SKPaint PaintCrosshair { get; set; } = Defaults.WindowZoomPaintCrosshair;
+        public float CrosshairSize { get; set; }
+        public SKPaint PaintCrosshair { get; set; }
 
-        public WindowZoom(SKRect bounds) : base(bounds)
+        public WindowZoom(SKPoint pos, SKSize size, SettingsWindowZoom settings) : base(pos, size, settings)
         {
-            Visible = Defaults.WindowZoomVisible;
-            CrosshairVisible = Defaults.WindowZoomCrosshairVisible;
+            PaintBorder = settings.PaintBorder.ToSKPaint();
+            PaintBackground = settings.PaintBackground.ToSKPaint();
+            PaintCrosshair = settings.PaintCrosshair.ToSKPaint();
+            CrosshairSize = settings.CrossHairSize;
+            CrosshairVisible = true;
+            Visible = true;
             Transparent = false;
-            PaintBorder = Defaults.WindowBasePaintBorder;
-            PaintBackground = Defaults.WindowBasePaintBackground;
         }
 
         public void UpdateZoom(SKImage screenshot, float zoomFactor)

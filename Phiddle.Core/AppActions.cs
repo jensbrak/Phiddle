@@ -13,22 +13,31 @@ namespace Phiddle.Core
     {
         [Display(Name = "Exit Application", ShortName = "Exit")]
         ApplicationExit,
+
         [Display(Name = "Select Next Tool", ShortName = "Next")]
         ToolSelectNext,
+
         [Display(Name = "Toggle Label Placement", ShortName = "Label")]
         LabelTogglePlacement,
+
         [Display(Name = "Toogle Info Window", ShortName = "Info")]
         WindowInfoToggleVisible,
+
         [Display(Name = "Toggle Zoom Window", ShortName = "Zoom")]
         WindowZoomToggleVisible,
+
         [Display(Name = "Toogle Help Lines", ShortName = "Lines")]
         HelpLinesToggleVisible,
+
         [Display(Name = "Toggle Golden Ratio Marks", ShortName = "Golden")]
         ToolMarksGoldenRatioToggleVisible,
+
         [Display(Name = "Toggle Endpoint Marks", ShortName = "Endpoint")]
         ToolMarksEndpointToggleVisible,
+
         [Display(Name = "Toggle Third Marks", ShortName = "Third")]
         ToolMarksThirdToggleVisible,
+
         [Display(Name = "Toggle Middle Marks", ShortName = "Middle")]
         ToolMarksMiddleToggleVisible,
     }

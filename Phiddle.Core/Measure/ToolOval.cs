@@ -2,25 +2,16 @@
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using Phiddle.Core.Settings;
 
 namespace Phiddle.Core.Measure
 {
     public class ToolOval : ToolRect
     {
-        protected override MarkBase[] DefaultMarks()
+        public ToolOval(SettingsTool settingsTool) : base(settingsTool)
         {
-            return new MarkBase[]
-            {
-                new MarkGoldenRatio(),
-                new MarkThird(),
-                new MarkMiddle(),
-                new MarkEndpoint() { Visible = false},
-            };
-        }
-
-        public ToolOval() : base()
-        {
-            marks = DefaultMarks();
+            CreateMarks(settingsTool, MarkId.Endpoint | MarkId.Middle | MarkId.Third | MarkId.Phi);
+            ToolId = ToolId.Oval;
         }
 
         public override Dictionary<Measurement, float> GetMeasurements()
@@ -51,13 +42,16 @@ namespace Phiddle.Core.Measure
         }
         protected override SKPoint GetLockedPos(SKPoint p)
         {
+            // pP is the passive endpoint, ie is diagonal to the endpoint being moved
+            var pP = DiagonalToActiveEndpoint.Pos;
+
             // Get positions on the X- Y-axis obtained by projecting endpoint of 
             // the vector from p0 to p. The resulting a is the point on the closest axis
             // (ie short side) and an (long side) is it's normal, ie the point on the other axis.
-            (SKPoint a, SKPoint an) = p0.Pos.ProjectXY(p);
+            (SKPoint a, SKPoint an) = pP.ProjectXY(p);
 
             //Get the locked point
-            var pos = p0.Pos + a + an;
+            var pos = pP + a + an;
 
             return pos;
         }
@@ -88,7 +82,7 @@ namespace Phiddle.Core.Measure
                 }
 
                 // Clip all marks but Endpoints (they're the bounding box)
-                if (mark.Category != MarkCategory.Endpoint)
+                if (mark.MarkId != MarkId.Endpoint)
                 {
                     c.Save();
                     c.ClipPath(clipPath);
@@ -107,7 +101,7 @@ namespace Phiddle.Core.Measure
                     c.DrawLine(h0, h1, mark.PaintMark);
                 }
 
-                if (mark.Category != MarkCategory.Endpoint)
+                if (mark.MarkId != MarkId.Endpoint)
                 {
                     c.Restore();
                 }
@@ -132,12 +126,7 @@ namespace Phiddle.Core.Measure
             c.DrawOval(cx, cy, rx, ry, PaintTool);
 
             // Draw basics
-            DrawBase(c);
-        }
-
-        public override string ToString()
-        {
-            return "Oval";
+            DrawGenericVisuals(c);
         }
     }
 }

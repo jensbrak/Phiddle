@@ -1,28 +1,17 @@
 ﻿using SkiaSharp;
 using Phiddle.Core.Extensions;
+using Phiddle.Core.Settings;
 
 namespace Phiddle.Core.Graphics
 {
-    public class Label : WindowBase
+    public class Label : Window
     {
         private string text;
         private SKPoint textOffset;
 
         public float TextPad { get; set; }
 
-        public SKPaint PaintText { get; set; }
-
-        public SKPoint Pos 
-        {
-            get
-            {
-                return new SKPoint(Bounds.Left, Bounds.Top);
-            }
-            set
-            {
-                Bounds = new SKRect(value.X, value.Y, value.X + Bounds.Width, value.Y + Bounds.Height);
-            } 
-        }
+//        public SKPaint PaintText { get; set; }
 
         public string Text 
         {
@@ -34,20 +23,18 @@ namespace Phiddle.Core.Graphics
             {
                 text = value;
                 var textBounds = PaintText.GetTextBounds(value);
-                var left = Bounds.Left;
-                var top = Bounds.Top;
                 var width = textBounds.Width + TextPad * 2;
                 var height = textBounds.Height + TextPad * 2;
-                Bounds = new SKRect(left, top, left + width, top + height);
+                Size = new SKSize(width, height);
                 textOffset = new SKPoint(TextPad - textBounds.Left, TextPad - textBounds.Top);
             }
         }
 
-        public Label(SKPoint pos, string text) : base(new SKRect())
+        public Label(SKPoint pos, string text, SettingsWindowLabel settings) : base(pos, SKSize.Empty, settings) 
         {
-            PaintBackground = Defaults.LabelPaintBackgroud;
-            PaintText = Defaults.LabelPaintText;
-            TextPad = Defaults.LabelTextPad;
+  //          PaintBackground = settings.PaintBackground.ToSKPaint();
+  //          PaintText = settings.PaintText.ToSKPaint();
+            TextPad = settings.TextPad;
             Transparent = false;
             Text = text;
             Pos = pos;

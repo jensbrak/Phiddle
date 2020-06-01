@@ -2,68 +2,73 @@
 using Phiddle.Core.Settings;
 using Phiddle.Core.Services;
 using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 
 namespace Phiddle.Core
 {
-    public class AppTools : IDisposable
+    public class AppTools
     {
-        private SettingsService<AppState> state;
-        private readonly ToolBase[] tools;
-        private int selected;
-        private LabelLocation labelLocation;
+        private readonly Tool[] toolSet;
+        private int iActiveTool;
+        private MarkId marksVisible;
 
-        public ToolBase SelectedTool 
+        public LabelLocation LabelLocation { get; set; }
+        public MarkId MarksVisible 
         { 
-            get
+            get => marksVisible;
+            set
             {
-                return tools[selected];
+                marksVisible = value;
+                foreach (var tool in toolSet)
+                {
+                    tool.SetMarksVisibility(marksVisible);
+                }
             }
         }
 
-        public AppTools(SettingsService<AppState> appState)
+        public Tool ActiveTool
         {
-            state = appState;
-            labelLocation = appState.Settings.LabelLocation;
-            selected = appState.Settings.CurrentTool;
-            
-            tools = new ToolBase[]
+            get
             {
-                new ToolLine() { LabelLocation = labelLocation },
-                new ToolRect() { LabelLocation = labelLocation },
-                new ToolOval() { LabelLocation = labelLocation },
+                return toolSet[iActiveTool];
+            }
+        }
+
+        public AppTools(AppState appState, AppSettings settings)
+        {
+            iActiveTool = (int)appState.ActiveTool;
+            LabelLocation = appState.LabelLocation;
+
+            toolSet = new Tool[]
+            {
+                new ToolLine(settings.Tool) { LabelLocation = LabelLocation },
+                new ToolRect(settings.Tool) { LabelLocation = LabelLocation },
+                new ToolOval(settings.Tool) { LabelLocation = LabelLocation },
             };
+
+            MarksVisible = appState.MarksVisible;
         }
 
         public void SelectNextTool()
         {
-            selected = ++selected % tools.Length;
+            iActiveTool = ++iActiveTool % toolSet.Length;
         }
 
         public void ToggleLabelPlacement()
         {
-            labelLocation = (LabelLocation)((int)++labelLocation % Enum.GetNames(typeof(LabelLocation)).Length);
+            LabelLocation = (LabelLocation)((int)++LabelLocation % Enum.GetNames(typeof(LabelLocation)).Length);
 
-            foreach (var tool in tools)
+            foreach (var tool in toolSet)
             {
-                tool.LabelLocation = labelLocation;
+                tool.LabelLocation = LabelLocation;
             }
         }
 
-        public void ToggleToolMarks(MarkCategory c)
+        public void ToggleToolMarksVisibility(MarkId toolmarkToToggle)
         {
-            Console.WriteLine("ToggleToolMarks for " + c);
-            foreach (var t in tools)
-            {
-                t.ToggleMarks(c);
-            }
-        }
-
-        public void Dispose()
-        {
-            state.Settings.CurrentTool = selected;
-            state.Settings.LabelLocation = labelLocation;
-            state.Save();
+            MarksVisible ^= toolmarkToToggle;
         }
     }
 }

@@ -2,12 +2,12 @@
 
 namespace Phiddle.Core.Services
 {
-    public class LoggingServiceConsole : ILoggingService
+    public class LogServiceConsole : ILogService
     {
-        public string Owner { get; set; }
-        public LoggingServiceConsole()
+        public string Source { get; set; }
+        public LogServiceConsole()
         {
-            Owner = "Phiddle.Core";
+            Source = "Phiddle.Core";
         }
         public void Debug(string source, string message)
         {
@@ -44,7 +44,7 @@ namespace Phiddle.Core.Services
             var pid = System.Diagnostics.Process.GetCurrentProcess().Id;
             var tid = System.Threading.Thread.CurrentThread.ManagedThreadId;
             var time = DateTime.Now;
-            var src = source == string.Empty ? $"{Owner}:" : $"{Owner}.{source}: ";
+            var src = source == string.Empty ? $"{Source}:" : $"{Source}.{source}: ";
             Console.WriteLine($"[{time:HH:mm:ss.fffff} {pname} ({pid}:{tid})] ({level}) {src}{message}");
         }
     }

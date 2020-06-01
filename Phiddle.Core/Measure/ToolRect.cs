@@ -3,32 +3,23 @@ using System;
 using Phiddle.Core.Extensions;
 using Phiddle.Core.Graphics;
 using System.Collections.Generic;
+using Phiddle.Core.Settings;
+using System.ComponentModel.DataAnnotations;
 
 namespace Phiddle.Core.Measure
 {
-    public class ToolRect : ToolBase
+    public class ToolRect : Tool
     {
-        protected override MarkBase[] DefaultMarks()
+        public ToolRect(SettingsTool settingsTool) : base(settingsTool)
         {
-            return new MarkBase[]
-            {
-                new MarkGoldenRatio(),
-                new MarkMiddle(),
-                new MarkThird(),
-            };
-        }
-
-        public ToolRect() : base()
-        {
+            CreateMarks(settingsTool, MarkId.Middle | MarkId.Third | MarkId.Phi);
+            ToolId = ToolId.Rect;
             // Important to set position and text after constructor call
 #pragma warning disable IDE0017 // Simplify object initialization
-            Label = new Label(new SKPoint(), string.Empty);
+            Label = new Label(new SKPoint(), string.Empty, settingsTool.Label);
 #pragma warning restore IDE0017 // Simplify object initialization
             Label.Text = GetLabelText();
             Label.Pos = GetLabelPos();
-
-            // Rectangle marks
-            marks = DefaultMarks();
 
             // Show all endpoints
             p0.Visible = true;
@@ -50,7 +41,7 @@ namespace Phiddle.Core.Measure
             c.DrawRect(p0.X, p0.Y, p1.X - p0.X, p1.Y - p0.Y, PaintTool);
 
             // Draw basics
-            DrawBase(c);
+            DrawGenericVisuals(c);
         }
         public override Dictionary<Measurement, float> GetMeasurements()
         {
@@ -112,16 +103,19 @@ namespace Phiddle.Core.Measure
 
         protected override SKPoint GetLockedPos(SKPoint p)
         {
+            // pP is the passive endpoint, ie is diagonal to the endpoint being moved
+            var pP = DiagonalToActiveEndpoint.Pos;
+
             // Get positions on the X- Y-axis obtained by projecting endpoint of 
             // the vector from p0 to p. The resulting a is the point on the closest axis
             // (ie short side) and an (long side) is it's normal, ie the point on the other axis.
-            (SKPoint a, SKPoint an) = p0.Pos.ProjectXY(p);
+            (SKPoint a, SKPoint an) = pP.ProjectXY(p);
 
             // b is what's missing to get Golden Ratio
             SKPoint b = an.Scale(Constants.PhiInv);
 
             // Finally get the new point 
-            var pos = p0.Pos + a + an + b;
+            var pos = pP + a + an + b;
 
             return pos;
         }
@@ -155,10 +149,6 @@ namespace Phiddle.Core.Measure
                     c.DrawLine(h0, h1, mark.PaintMark);
                 }
             }
-        }
-         public override string ToString()
-        {
-            return "Rectangle";
         }
     }
 }

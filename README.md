@@ -1,4 +1,4 @@
-# Phiddle (v 0.3)
+# Phiddle (v 0.4)
 Visually minimalistic screen pixel measuring program for PC (Win/Mac).
 
 # Introduction
@@ -23,21 +23,22 @@ Visually minimalistic screen pixel measuring program for PC (Win/Mac).
 * Marks for endpoints, golden ratio, middle, thirds
 * Lock to axis, golden ratio or fixed width/height ratio (depending on tool)
 * Zoom window for fine grained measuring
+* Configurable via settings files
 
 ## How to use
 * Left mouse click to start measure at current mouse position
 * A second left mouse click to stop measure at current mouse position
-* Additional left mouse click:
-** If inside bounds of tool: move tool
-** If inside bounds of tool endpoint: resize tool using selected endpoint
-** If outside bounds of tool: hide tool / clear current measurements 
+* A third left mouse click, depending on location:
+  * If inside bounds of tool: move tool (click again to place)
+  * If inside bounds of tool endpoint: resize tool using selected endpoint (click again to finalize)
+  * If outside bounds of tool: hide tool / clear current measurements 
 
 ## Shortcuts 
-Note: most of these can (as of 0.3.0) be edited in config file, see further down.
+Default key map, see 'Settings files' for details
 * Esc: Exit program
-* Space: Toggle measuring tool (line/rect/oval)
+* Space: Cycle measuring tool (line/rect/oval)
 * H: Toggle help lines (on/off)
-* L: Toggle tool label position (off/center tool/below mouse)
+* L: Cycle tool label position (off/center tool/below mouse)
 * I: Toggle information window (on/off)
 * Z: Toggle zoom window (on/off)
 * E: Toggle endpoint marks
@@ -51,20 +52,22 @@ Note: most of these can (as of 0.3.0) be edited in config file, see further down
 * Rect: lock will keep rectangle width/height aspect to golden ratio
 * Oval: lock will keep the oval width and hight equal, ie make a circle
 
-## Config files
+## Settings files
 Located in user settings directory:
 * Mac: `Users/<name>/.config/phiddle/`
 * Win: `User and settings\<user>\AppData\Roaming\phiddle\`
 
-Files and their content:
-* `phiddle.appinput.json`: Shortcuts mapping Key Codes to Phiddle Actions
-* `phiddle.appstate.json`: State of Phiddle to be used next launch
+Files and their contents:
+* `phiddle.appinputwin.json`: Settings mapping Key Codes to Phiddle Actions for Windows client
+* `phiddle.appinputmac.json`: Settings mapping Key Codes to Phiddle Actions for Mac client
+* `phiddle.appstate.json`: State of Phiddle to be used next launch (selected tool and more)
+* `phiddle.appsettings.json`: Configurable settings of Phiddle (colors, fonts and more)
 
 For available Key Codes see:
 * Mac: `NSKey` enum in `AppKit`
 * Win: `Keys enum in System.Windows.Forms`
 
-Note: control keys not implemented (yet), nor any mouse related mapping
+Note: control keys and mouse events not supported (yet...)
 
 # Implementation
 ## Dependencies
@@ -100,25 +103,31 @@ Really not much to it. It's a poor mans Xamarin Forms wannabe:
 # Issues and roadmap
 ## Known issues and shortcomings
 * Multiple screens don't work, currently mess up program real good
-* Lock tool works only partially, resize secondary endpoint using lock fail
 * [Mac]: Updating zoom/info window live only work when moving mouse. There's something about that refresh...
 * [Mac]: Permissions required to record screen (zoom window) not accessible when app is running
 
 ## Roadmap / Ideas
+* General: Settings interface (idea: use native UI for this - Win: notification area, Mac: system menu)
+* General: multiple measurements/tools (ie several objects on screen, not one only)?
 * Tool: additional tool: multiline (polygon) 
 * Tool: rotate placed tool
 * Tool: measure angle (maybe combined with rotation?)
-* General: multiple measurements/tools (ie several objects on screen, not one only)?
-* General: input mapping (possibility to assign keys/mouse to functionality
-* Internal: clean up Phiddle.Core and other messy parts
-* Internal: better approach for Defaults (move to settings and persist)
 * Visuals: automatically move windows when measuring obscured area
 * Visuals: window placement in any corner as per settings
-* Visuals: show major/minor marks (Mark.pos as function instead of constants?)
+* Visuals: show major/minor marks 
 * Stability: deal with multiple screens and scaling/DPI
 
 # History
-## 0.3
+## 0.4.0
+* Core: Settings functionality refactored 
+* Core: AppSettings refactored
+* Core: AppState settings service added
+* Core: Defaults moved from single file to appropriate settings file
+* Clients: Logging service added where needed
+* Clients: AppInput refactored
+* Fixed: Lock tool works only partially, resize secondary endpoint using lock fail
+
+## 0.3.0
 * Core: Settings service to load/save settings classes
 * Core: Interface slimmed down (replaced by single point for user input)
 * Mac: Key Map (normal keys only)

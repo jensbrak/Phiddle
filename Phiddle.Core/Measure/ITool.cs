@@ -15,7 +15,7 @@ namespace Phiddle.Core.Measure
         bool Moving { get; set; }
         bool Resizable { get; set; }
         bool Resizing { get; set; }
-        void ToggleMarks(MarkCategory c);
+        void ToggleMark(MarkId c);
         Dictionary<Measurement, float> GetMeasurements();
         void Move(SKPoint p);
         void Resize(SKPoint p);

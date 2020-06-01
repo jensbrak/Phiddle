@@ -1,11 +1,12 @@
 ﻿using Phiddle.Core.Extensions;
 using Phiddle.Core.Measure;
+using Phiddle.Core.Settings;
 using SkiaSharp;
 using System;
 
 namespace Phiddle.Core.Graphics
 {
-    public class WindowInfo : WindowText
+    public class WindowTextInfo : WindowText
     {
         private enum LineNumbers
         {
@@ -30,16 +31,16 @@ namespace Phiddle.Core.Graphics
             get => Lines[(int)LineNumbers.LabelPlacement];
             set => Lines[(int)LineNumbers.LabelPlacement] = value;
         }
-        public WindowInfo(SKRect bounds) : base(bounds)
+        public WindowTextInfo(SKPoint pos, SKSize size, SettingsWindowText settings) : base(pos, size, settings)
         {
-            Visible = Defaults.WindowInfoVisible;
+            Visible = true;
             Lines = new string[Enum.GetNames(typeof(LineNumbers)).Length + Enum.GetNames(typeof(Measurement)).Length - 1];
-            TabStops = new float[] { Defaults.WindowInfoTextLeftMargin };
+            TabStops = new float[] { settings.TextLeftMargin };
         }
 
         public void ReportMousePosition(SKPoint pos)
         {
-            MousePosition = $"Mouse:\t{string.Format(Defaults.PositionFormat, pos.X, pos.Y)}";
+            MousePosition = $"Mouse:\t{string.Format("{0}, {1}", pos.X, pos.Y)}";
         }
 
         public void ReportLabelPlacement(ITool tool)

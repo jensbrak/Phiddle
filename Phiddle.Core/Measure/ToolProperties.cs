@@ -1,7 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Phiddle.Core.Measure
 {
+    public enum ToolId
+    {
+        [Display(Name = "Line", ShortName = "L")]
+        Line,
+        [Display(Name = "Rectangle", ShortName = "R")]
+        Rect,
+        [Display(Name = "Oval", ShortName = "O")]
+        Oval
+    }
+
     /// <summary>
     /// The different locations a label can have, relate a Tool
     /// </summary>
@@ -35,16 +46,17 @@ namespace Phiddle.Core.Measure
     /// <summary>
     /// The categories of marks for a tool
     /// </summary>
-    public enum MarkCategory
+    
+    [Flags]public enum MarkId
     {
         [Display(Name = "Endpoint", ShortName = "EP")]
-        Endpoint,
+        Endpoint = 1,
         [Display(Name = "Golden Ratio", ShortName = "GR")]
-        GoldenRatio,
+        Phi = 2,
         [Display(Name = "Middle", ShortName = "½")]
-        Middle,
+        Middle = 4,
         [Display(Name = "Third", ShortName = "⅓")]
-        Third,
+        Third = 8,
     }
 
 }

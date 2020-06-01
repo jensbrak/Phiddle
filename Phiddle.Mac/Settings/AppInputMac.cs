@@ -5,12 +5,11 @@ using Phiddle.Core.Settings;
 
 namespace Phiddle.Mac.Settings
 {
-    public static class AppInputMac
+    public class AppInputMac : AppInput<NSKey>
     {
-        public static AppInput Defaults { get; } =
-            new AppInput()
-            {
-                Keys = new Dictionary<ushort, ActionId>(System.Enum.GetNames(typeof(ActionId)).Length)
+        public AppInputMac()
+        {
+            InputMap = new Dictionary<ushort, ActionId>(System.Enum.GetNames(typeof(ActionId)).Length)
                 {
                     { (ushort)NSKey.Escape, ActionId.ApplicationExit },
                     { (ushort)NSKey.Space, ActionId.ToolSelectNext },
@@ -22,7 +21,7 @@ namespace Phiddle.Mac.Settings
                     { (ushort)NSKey.E, ActionId.ToolMarksEndpointToggleVisible },
                     { (ushort)NSKey.M, ActionId.ToolMarksMiddleToggleVisible },
                     { (ushort)NSKey.T, ActionId.ToolMarksThirdToggleVisible },
-                }
-            };
+                };
+        }
     }
 }

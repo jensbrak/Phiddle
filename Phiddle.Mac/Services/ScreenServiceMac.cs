@@ -116,7 +116,6 @@ namespace Phiddle.Mac.Services
                 var aPoint = pos.ToCGPointFlipY();
                 var view = PhiddleWindow.ContentView.HitTest(aPoint);
                 view.NeedsDisplay = true;
-                //Console.WriteLine($"Phiddle.Mac.ScreenService.Invalidate ({view.Identifier}): invalidate at pos = {pos}");
             }); 
         }
 

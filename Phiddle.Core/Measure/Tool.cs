@@ -3,45 +3,49 @@ using Phiddle.Core.Graphics;
 using Phiddle.Core.Extensions;
 using SkiaSharp;
 using System;
+using System.Linq;
+using Phiddle.Core.Settings;
 
 namespace Phiddle.Core.Measure
 {
-    public abstract class ToolBase : ITool
+    /// <summary>
+    /// Endpoint layout:
+    /// 
+    ///  p0_____p3
+    ///   |     |
+    ///   |_____|
+    ///  p2     p1
+    /// 
+    /// </summary>
+    public abstract class Tool : ITool
     {
-        protected WindowBase frame;
         protected readonly float boundsVisualPadding;
         protected readonly float boundsGripMargin;
         protected LabelLocation labelPlacement;
+        protected Window frame;
         protected Endpoint p0; // top-left
         protected Endpoint p1; // bottom-right
         protected Endpoint p2; // bottom-left
         protected Endpoint p3; // top-right
-        protected MarkBase[] marks;
+        protected ToolMark[] marks;
 
         public Endpoint ActiveEndpoint
         {
             get
             {
-                if (p0.Focused)
-                {
-                    return p0;
-                }
-                else if (p1.Focused)
-                {
-                    return p1;
-                }
-                else if (p2.Focused)
-                {
-                    return p2;
-                }
-                else if (p3.Focused)
-                {
-                    return p3;
-                }
-
-                return null;
+                return p0.Focused ? p0 : p1.Focused ? p1 : p2.Focused ? p2 : p3.Focused ? p3: null;
             }
         }
+
+        public Endpoint DiagonalToActiveEndpoint
+        {
+            get
+            {
+                return p0.Focused ? p1 : p1.Focused ? p0 : p2.Focused ? p3 : p3.Focused ? p2 : null;
+            }
+        }
+        
+        public ToolId ToolId { get; protected set; }
         public SKPaint PaintTool { get; set; }
         public bool Visible { get; set; }
         public bool Locked { get; set; }
@@ -64,24 +68,33 @@ namespace Phiddle.Core.Measure
         /// Default constructor
         /// </summary>
         /// <param name="screenService"></param>
-        protected ToolBase()
+        protected Tool(SettingsTool settingsTool)
         {
             Visible = false;
-            p0 = new Endpoint(SKPoint.Empty);
-            p1 = new Endpoint(SKPoint.Empty);
-            p2 = new Endpoint(SKPoint.Empty);
-            p3 = new Endpoint(SKPoint.Empty);
-            boundsVisualPadding = Defaults.ToolBoundsVisualPadding;
-            boundsGripMargin = Defaults.ToolEndpointSize;
-            frame = new WindowBase(new SKRect()) { PaintBorder = Defaults.ToolBasePaintBounds };
-            PaintTool = Defaults.ToolBasePaint;
+            p0 = new Endpoint(SKPoint.Empty, settingsTool);
+            p1 = new Endpoint(SKPoint.Empty, settingsTool);
+            p2 = new Endpoint(SKPoint.Empty, settingsTool);
+            p3 = new Endpoint(SKPoint.Empty, settingsTool);
+            boundsVisualPadding = settingsTool.BoundsPad;
+            boundsGripMargin = settingsTool.SizeEndpoint;
+            frame = new Window(SKPoint.Empty, SKSize.Empty, settingsTool.SettingsToolFrame);
+            frame.PaintBorder.PathEffect = SKPathEffect.CreateDash(new float[] { 10f, 5f }, 15f);
+            PaintTool = settingsTool.PaintTool.ToSKPaint();
         }
 
-        public void ToggleMarks(MarkCategory c)
+        public void SetMarksVisibility(MarkId visibleMarks)
         {
             foreach (var m in marks)
             {
-                if (m.Category == c)
+                m.Visible = visibleMarks.HasFlag(m.MarkId);
+            }
+        }
+
+        public void ToggleMark(MarkId c)
+        {
+            foreach (var m in marks)
+            {
+                if (m.MarkId == c)
                 {
                     m.Visible = !m.Visible;
                     break;  // Should be only one of each
@@ -90,9 +103,9 @@ namespace Phiddle.Core.Measure
         }
 
         /// <summary>
-        /// Resize the tool at endpoint P1
+        /// Resize the tool by updating focused endpoint to position p
         /// </summary>
-        /// <param name="p">The new position of P1</param>
+        /// <param name="p">The new position of focused endpoint</param>
         public virtual void Resize(SKPoint p)
         {
             // No endpoint focused means nothing to resize
@@ -104,35 +117,36 @@ namespace Phiddle.Core.Measure
             // Get new position with respect to if tool is locked or not
             var pNew = Locked ? GetLockedPos(p) : p;
 
-            // Update the right endpoint and dependent one correspondingly
+            // Update the focused endpoint and dependent ones accoringly
             if (p0.Focused)
             {
-                p0.Pos = pNew;  // moving
-                // p1.Pos fixed
-                p2.Pos = new SKPoint(p0.Pos.X, p2.Pos.Y);
-                p3.Pos = new SKPoint(p3.Pos.X, p0.Pos.Y);
+                p0.Pos = pNew;  // moving endpoint
+                // p1.Pos is fixed
+                p2.Pos = new SKPoint(p0.Pos.X, p2.Pos.Y); // p2.X depends on p0.X
+                p3.Pos = new SKPoint(p3.Pos.X, p0.Pos.Y); // p3.Y depends on p0.Y
             }
             else if (p1.Focused)
             {
-                // p0.Pos fixed
-                p1.Pos = pNew; // moving
-                p2.Pos = new SKPoint(p2.Pos.X, p1.Pos.Y);
-                p3.Pos = new SKPoint(p1.Pos.X, p3.Pos.Y);
+                p1.Pos = pNew; // moving endpoint
+                // p0.Pos is fixed
+                p3.Pos = new SKPoint(p1.Pos.X, p3.Pos.Y); // p3.X depends on p1.X
+                p2.Pos = new SKPoint(p2.Pos.X, p1.Pos.Y); // p2.Y depends on p1.Y
             }
             else if (p2.Focused)
             {
-                p2.Pos = pNew; // moving
-                p0.Pos = new SKPoint(p2.Pos.X, p0.Pos.Y);
-                p1.Pos = new SKPoint(p1.Pos.X, p2.Pos.Y);
-                // p3.Pos fixed
+                p2.Pos = pNew; // moving endpoint
+                // p3.Pos is fixed
+                p0.Pos = new SKPoint(p2.Pos.X, p0.Pos.Y); // p0.X depends on p2.X
+                p1.Pos = new SKPoint(p1.Pos.X, p2.Pos.Y); // p1.Y depends on p2.Y
             }
             else if (p3.Focused)
             {
-                p3.Pos = pNew;
-                p0.Pos = new SKPoint(p0.Pos.X, p3.Pos.Y);
-                p1.Pos = new SKPoint(p3.Pos.X, p1.Pos.Y);
-                //p2.Pos fixed
+                p3.Pos = pNew; // moving endpoint
+                //p2.Pos is fixed
+                p1.Pos = new SKPoint(p3.Pos.X, p1.Pos.Y); // p1.X depends on p3.X
+                p0.Pos = new SKPoint(p0.Pos.X, p3.Pos.Y); // p0.Y depends on p3.Y
             }
+
             // Make sure rect gets properly adjusted with margins
             var left = Math.Min(Math.Min(p0.X, p1.X), Math.Min(p2.X, p3.X));
             var top = Math.Min(Math.Min(p0.Y, p1.Y), Math.Min(p2.Y, p3.Y));
@@ -140,11 +154,8 @@ namespace Phiddle.Core.Measure
             var bottom = Math.Max(Math.Max(p0.Y, p1.Y), Math.Max(p2.Y, p3.Y));
 
             // Make bounds for tool a little larger than the tool itself, so that drawing bounds will not obscure the tool
-            frame.Bounds = new SKRect(
-                left - boundsVisualPadding,
-                top - boundsVisualPadding,
-                right + boundsVisualPadding,
-                bottom + boundsVisualPadding);
+            frame.Pos = new SKPoint(left - boundsVisualPadding, top - boundsVisualPadding);
+            frame.Size = new SKSize(right - left + boundsVisualPadding * 2f, bottom - top + boundsVisualPadding * 2f);
 
             // Make label be correctly positioned
             UpdateLabel();
@@ -161,11 +172,7 @@ namespace Phiddle.Core.Measure
             p1.Pos += p;
             p2.Pos += p;
             p3.Pos += p;
-            frame.Bounds = new SKRect(
-                frame.Bounds.Left + p.X,
-                frame.Bounds.Top + p.Y,
-                frame.Bounds.Right + p.X,
-                frame.Bounds.Bottom + p.Y);
+            frame.Pos += p;
             UpdateLabel();
         }
 
@@ -207,7 +214,6 @@ namespace Phiddle.Core.Measure
             // From hidden to initial resize:
             if (!Visible)
             {
-                Console.WriteLine($"Phiddle.Core.ToolBase.NextAction: action = Start resizing");
                 // Start resizing
                 p0.Pos = p;
                 p1.Pos = p;
@@ -223,7 +229,6 @@ namespace Phiddle.Core.Measure
             // From resizing to passive
             if (Resizing)
             {
-                Console.WriteLine($"Phiddle.Core.ToolBase.NextAction: action = Stop resizing (first)");
                 // Finish resizing
                 Resizing = false;
                 return;
@@ -233,7 +238,6 @@ namespace Phiddle.Core.Measure
             if (Moving)
             {
                 // Finish moving
-                Console.WriteLine($"Phiddle.Core.ToolBase.NextAction: action = Stop moving");
                 Moving = false;
                 return;
             }
@@ -241,7 +245,6 @@ namespace Phiddle.Core.Measure
             // Passive and movable so start moving
             if (Movable)
             {
-                Console.WriteLine($"Phiddle.Core.ToolBase.NextAction: action = Start moving");
                 // Start moving
                 Moving = true;
                 Movable = false;
@@ -251,14 +254,12 @@ namespace Phiddle.Core.Measure
             // Passive and resizable so start resizing (once again) 
             if (Resizable)
             {
-                Console.WriteLine($"Phiddle.Core.ToolBase.NextAction: action = Start resizing (again)");
                 // Start resizing
                 Resizing = true;
                 Resizable = false;
                 return;
             }
 
-            Console.WriteLine($"Phiddle.Core.ToolBase.NextAction: action = Hiding");
             // Passive and neither movable or resizable so go back to hidden
             Visible = false;
             Moving = false;
@@ -292,7 +293,7 @@ namespace Phiddle.Core.Measure
             Label.Text = GetLabelText();
         }
 
-        protected virtual void DrawBase(SKCanvas c)
+        protected virtual void DrawGenericVisuals(SKCanvas c)
         {
             // Do we have a tool that can be moved?
             if (Visible && Movable)
@@ -315,6 +316,26 @@ namespace Phiddle.Core.Measure
             }
         }
 
+        protected void CreateMarks(SettingsTool settings, MarkId marksSupported)
+        {
+            var numMarks = Enum.GetValues(typeof(MarkId)).Cast<Enum>().Count(marksSupported.HasFlag);
+            marks = new ToolMark[numMarks];
+            int i = 0;
+
+            foreach (var markId in settings.Marks.Keys)
+            {
+                if ((markId & marksSupported) != 0)
+                {
+                    marks[i++] = new ToolMark(markId, settings.Marks[markId]);
+                }
+            }
+        }
+
+        public override string ToString()
+        {
+            return ToolId.GetDisplayName();
+        }
+
         // Some internals: a tool needs to be able to draw marks and calculate label properties
         protected virtual void DrawMarks(SKCanvas c)
         {
@@ -331,10 +352,7 @@ namespace Phiddle.Core.Measure
         protected virtual SKPoint GetLockedPos(SKPoint p)
         {
             throw new NotImplementedException("DrawMarks");
-        }
-        protected virtual MarkBase[] DefaultMarks()
-        {
-            return new MarkBase[] { };
+            
         }
     }
 }

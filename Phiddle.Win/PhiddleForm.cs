@@ -23,8 +23,8 @@ namespace Phiddle.Win
         private SKGLControl controlZoom;
         private PhiddleCore phiddle;
         private IScreenService screen;
-        private AppInput appInput;
-        public ILoggingService Log { get; set; }
+        private AppInput<Keys> appInput;
+        public ILogService Log { get; set; }
 
         public PhiddleForm()
         {
@@ -50,20 +50,17 @@ namespace Phiddle.Win
             phiddle = new PhiddleCore();
             phiddle.Services.AddSingleton(screen);
             phiddle.Services.AddSingleton<LoggingService>();
-            phiddle.Services.AddSingleton<SettingsService<AppInput>>();
+            phiddle.Services.AddSingleton<SettingsService<AppInputWin>>();
             phiddle.Initialize();
 
             // Get the services we need right away
             Log = PhiddleCore.ServiceProvider.GetRequiredService<LoggingService>();
-            var settingsService = PhiddleCore.ServiceProvider.GetRequiredService<SettingsService<AppInput>>();
-
+            var settingsService = PhiddleCore.ServiceProvider.GetRequiredService<SettingsService<AppInputWin>>();
             appInput = settingsService.Settings;
 
-            if (!settingsService.Loaded)
+            if (!settingsService.Loaded & settingsService.IsDefault)
             {
-                settingsService.Settings = AppInputWin.Defaults;
-                settingsService.Save();
-                appInput = AppInputWin.Defaults;
+                Log.Warning("InitializePhiddleCore", "Could not load settings for App Input, using defaults");
             }
         }
 
@@ -107,7 +104,7 @@ namespace Phiddle.Win
         private void HandleFormLoad(object sender, EventArgs e)
         {
             // Ready to start Core
-            phiddle.Start();
+            phiddle.StartUp();
         }
 
         private void HandlePaintGLSurfaceTool(object sender, SKPaintGLSurfaceEventArgs e)
@@ -143,13 +140,12 @@ namespace Phiddle.Win
 
         private void HandleKeyDown(object sender, KeyEventArgs e)
         {
-            var keyCode = Convert.ToUInt16(e.KeyCode);
-            if (!appInput.Keys.ContainsKey(keyCode))
+            if (!appInput.InputMap.ContainsKey((ushort)e.KeyCode))
             {
                 return;
             }
 
-            var action = appInput.Keys[keyCode];
+            var action = appInput.InputMap[(ushort)e.KeyCode];
             phiddle.InvokeAction(action);
 
             if (action == ActionId.ApplicationExit)
