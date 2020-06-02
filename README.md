@@ -1,5 +1,7 @@
+
+
 # Phiddle (v 0.4)
-Visually minimalistic screen pixel measuring program for PC (Win/Mac).
+<img src="Resources/Logo/PhiddleIcon_64x64.png" align="top"> Visually minimalistic screen pixel measuring program for PC (Win/Mac).
 
 # Introduction
 
@@ -65,7 +67,7 @@ Files and their contents:
 
 For available Key Codes see:
 * Mac: `NSKey` enum in `AppKit`
-* Win: `Keys enum in System.Windows.Forms`
+* Win: `Keys` enum in `System.Windows.Forms`
 
 Note: control keys and mouse events not supported (yet...)
 
