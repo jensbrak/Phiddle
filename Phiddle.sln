@@ -15,6 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phiddle.Win", "Phiddle.Win\Phiddle.Win.csproj", "{380514A3-B9F1-4C8C-ABED-5D50FD1F6D6B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{3B385302-B801-4146-BBB6-FF274E971794}"
+	ProjectSection(SolutionItems) = preProject
+		Scripts\BuildSetupFile.py = Scripts\BuildSetupFile.py
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +41,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3B385302-B801-4146-BBB6-FF274E971794} = {06A4D039-03C0-441F-ACBD-C115B78132A5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FB5FBCB9-F64C-43D1-AF3D-F5628657BAA4}
