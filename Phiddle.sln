@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phiddle.Win", "Phiddle.Win\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{3B385302-B801-4146-BBB6-FF274E971794}"
 	ProjectSection(SolutionItems) = preProject
-		Scripts\BuildSetupFile.py = Scripts\BuildSetupFile.py
+		Scripts\BuildSetupWin.py = Scripts\BuildSetupWin.py
 	EndProjectSection
 EndProject
 Global
