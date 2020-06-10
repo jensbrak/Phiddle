@@ -1,7 +1,7 @@
 
 
 # Phiddle (v 0.4.1)
-<img src="Resources/Logo/PhiddleIcon_64x64.png" align="top"> Visually minimalistic screen pixel measuring program for PC (Win/Mac).
+<img src="Resources/Logo/PhiddleLogo_64x64.png" align="top"> Visually minimalistic screen pixel measuring program for PC (Win/Mac).
 
 # Introduction
 
