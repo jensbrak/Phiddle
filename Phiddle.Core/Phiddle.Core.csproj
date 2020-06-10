@@ -7,7 +7,7 @@
     <Authors>jensbrak</Authors>
     <Copyright>jensbrak</Copyright>
     <PackageProjectUrl>zon3.se/phiddle</PackageProjectUrl>
-    <ReleaseVersion>0.4.0.1</ReleaseVersion>
+    <ReleaseVersion>0.4.1</ReleaseVersion>
     <Company>jensbrak</Company>
     <PackageIcon>PhiddleIcon_64x64.png</PackageIcon>
     <RepositoryUrl>https://github.com/jensbrak/Phiddle</RepositoryUrl>
@@ -25,10 +25,6 @@
 
   <ItemGroup>
     <None Remove="appSettings.json" />
-    <None Include="..\Resources\Logo\PhiddleIcon_64x64.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Input\Target.cs" />

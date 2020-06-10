@@ -4,7 +4,7 @@
 #define MyAppName "Phiddle"
 #define MyAppVersion "0.4.1"
 #define MyAppPublisher "jensbrak"
-#define MyAppURL "https://zon3.se"
+#define MyAppURL "https://zon3.se/phiddle"
 #define MyAppExeName "Phiddle.exe"
 
 [Setup]
@@ -23,9 +23,15 @@ DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 OutputBaseFilename=PhiddleSetup
-SetupIconFile=C:\Users\brakejen\source\repos\Phiddle\Resources\Logo\PhiddleIcon.ico
+SetupIconFile=..\Resources\Logo\PhiddleIcon.ico
 Compression=lzma
 SolidCompression=yes
+VersionInfoVersion=0.4.1
+VersionInfoCompany=zon3.se
+VersionInfoCopyright=jensbrak
+VersionInfoProductName=zon3.se
+DisableWelcomePage=False
+WizardImageFile=PhiddleSetup100.bmp,PhiddleSetup125.bmp,PhiddleSetup150.bmp,PhiddleSetup175.bmp,PhiddleSetup200.bmp,PhiddleSetup225.bmp,PhiddleSetup250.bmp
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -35,8 +41,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "C:\Users\brakejen\source\repos\Phiddle\Phiddle.Win\bin\Release\Phiddle.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\brakejen\source\repos\Phiddle\Phiddle.Win\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\Phiddle.Win\bin\Release\Phiddle.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Phiddle.Win\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -45,6 +51,10 @@ Name: "{group}\{cm:ProgramOnTheWeb,{#MyAppName}}"; Filename: "{#MyAppURL}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
+Name: "{group}\{cm:UninstallProgram, {#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+
+[ThirdParty]
+UseRelativePaths=True
