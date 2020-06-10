@@ -1,6 +1,6 @@
 
 
-# Phiddle (v 0.4)
+# Phiddle (v 0.4.1)
 <img src="Resources/Logo/PhiddleIcon_64x64.png" align="top"> Visually minimalistic screen pixel measuring program for PC (Win/Mac).
 
 # Introduction
@@ -120,6 +120,11 @@ Really not much to it. It's a poor mans Xamarin Forms wannabe:
 * Stability: deal with multiple screens and scaling/DPI
 
 # History
+## 0.4.1
+* Win: Updated components and framework
+* General: Setup for Windows
+* Visuals: Logo and icon
+
 ## 0.4.0
 * Core: Settings functionality refactored 
 * Core: AppSettings refactored
