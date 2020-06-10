@@ -40,7 +40,7 @@ namespace Phiddle.Core.Graphics
 
         public void ReportMousePosition(SKPoint pos)
         {
-            MousePosition = $"Mouse:\t{string.Format("{0}, {1}", pos.X, pos.Y)}";
+            MousePosition = $"Mouse:\t{string.Format("{0:F1}, {1:F1}", pos.X, pos.Y)}";
         }
 
         public void ReportLabelPlacement(ITool tool)
