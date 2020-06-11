@@ -47,6 +47,7 @@ Default key map, see 'Settings files' for details
 * G: Toggle golden ratio marks
 * M: Toggle middle marks
 * T: Toggle third marks
+* W: Toggle tool width (normal/wide)
 * Ctrl: Lock tool while measuring (see Lock tool)
 
 ## Lock tool
@@ -57,7 +58,7 @@ Default key map, see 'Settings files' for details
 ## Settings files
 Located in user settings directory:
 * Mac: `Users/<name>/.config/phiddle/`
-* Win: `User and settings\<user>\AppData\Roaming\phiddle\`
+* Win: `Users and settings\<name>\AppData\Roaming\phiddle\`
 
 Files and their contents:
 * `phiddle.appinputwin.json`: Settings mapping Key Codes to Phiddle Actions for Windows client
