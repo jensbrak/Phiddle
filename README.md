@@ -1,7 +1,7 @@
 
 
 # Phiddle (v 0.4.1)
-<img src="Resources/Logo/PhiddleLogo_64x64.png" align="top"> Visually minimalistic screen pixel measuring program for PC (Win/Mac).
+<img src="Resources/Logo/PhiddleLogo_64x64.png" align="top"> Screen pixel measuring app with a minimalistic φlosophy.
 
 # Introduction
 
@@ -14,8 +14,8 @@
 ## Phiddle is not (and will most likely not be):
 * Fancy graphics or a full blown screen ruler program
 * Supporting physical units (or scaling/DPI-awareness) or multiple screens 
-* Well written as far as I'm concerned, code is for trying out ideas but not form basis of a real app
-* Mobile app
+* Near production quality of an app, functionality and code is for fun and to explore and... fiddle. Sorry Phiddle.
+* Supporting mobile devices
 
 # Instructions
 ## Features
@@ -84,7 +84,7 @@ Note: control keys and mouse events not supported (yet...)
 Really not much to it. It's a poor mans Xamarin Forms wannabe:
 * A common project for shared code (Phiddle.Core)
 * A Mac specific project with launcher for Mac
-* A Win specific project with launcher for Mac
+* A Win specific project with launcher for Win
 
 ## Phiddle.Core
 * Drawing of basic UI components (`/Graphics/`)
@@ -162,7 +162,7 @@ Really not much to it. It's a poor mans Xamarin Forms wannabe:
 
 # Golden ratio and this app - Bonus section
 ## Math is ... hard. I mean... fun!
-No matter your relation with math it's hard not to appreciate the beauty of many mathematical concepts and ideas. I have issues using math without being frustrated. Feeling my own lack of understanding limiting the fun and usability of math. Some things are just too cool to ignore. Like the Golden Ratio. In the simplest form a number: `1.61...`. If you go a little beyond that number you will find that it's more of a... way of looking at things.
+It's hard not to appreciate the beauty of many mathematical concepts and ideas. I, like many (?), have issues using math without being frustrated. Feeling my own lack of understanding limiting the fun and usability of math. But some things are just too cool to ignore. Like the Golden Ratio. In the simplest form a number: `1.61...`. If you go a little beyond that number you will find that it's more of a... way of looking at things. A ... philosopy.
 
 ## Golden Ratio and measuring pixels
 One of the most well known uses of the Golden Ratio is to find harmonic relations between something "shorter" and something slightly "longer". Like the ratio of a rectangle, the relation between the short and long sides. I believe it is more commonly used as a confirmation  of that certain things has good proportions, rather than a way to actually design them that way to begin with.
@@ -170,11 +170,11 @@ One of the most well known uses of the Golden Ratio is to find harmonic relation
 You'll find the Golden Ratio in artworks, in common shapes around you and you'll find it in nature. It is fun to measure things and realize how common the ratio is. This is where I wanted to do something. Did not find any good application that enabled me to measure things on the screen of my computer (from photos to UI components, you name it!).
 
 ## Of course those apps exist
-Of course there are such apps. I just missed them as I was way to eager to try my own luck doing one. I'd like to point out one specific (that I happened to do a PR for by adding Golden Ratio markers): 
+Of course there are such apps. I just missed them as I was way to eager to try my own luck doing one. I'd like to point out one specific (that I happened to do a PR for by adding Golden Ratio markers). I really like it and it's a nice, usable, open-source screen ruler app. Check it out:
 
 * https://sourceforge.net/projects/screenruler/  with source here on GitHub: https://github.com/bluegrams/ScreenRuler
 
-Also found a couple of commercial programs that I haven't tried but seem to boast with lots of Golden Ratio related functionality. I have intentionally NOT looked at them since I didn't want to get influenced by them. They're most likely awesome and more useful than my program ever will be (or aim to be). 
+I also found a couple of commercial programs that I haven't tried but they seem to boast with lots of Golden Ratio related functionality. I have intentionally NOT looked at them since I didn't want to get influenced by them. They're most likely awesome and more useful than my program ever will be (or aim to be). 
 
 * http://www.markuswelz.de/software2/
 * https://www.phimatrix.com/
