@@ -70,7 +70,7 @@ For available Key Codes see:
 * Mac: `NSKey` enum in `AppKit`
 * Win: `Keys` enum in `System.Windows.Forms`
 
-Note: control keys and mouse events not supported (yet...)
+Note: For convenience, the phiddle.appinput<win/mac>.json file has all available keys for each platform. A tad unconventional but I thought: why not? :) 
 
 # Implementation
 ## Dependencies
