@@ -258,6 +258,7 @@ namespace Phiddle.Core
             appStateService.Settings.ActiveTool = appTools.ActiveTool.ToolId;
             appStateService.Settings.LabelLocation = appTools.LabelLocation; 
             appStateService.Settings.MarksVisible = appTools.MarksVisible;
+            appStateService.Settings.ToolWideLinesOn = appTools.WideLinesOn;
             appStateService.Save();
 
             timer.Stop();
@@ -441,6 +442,7 @@ namespace Phiddle.Core
                 { ActionId.ToolSelectNext, () => { appTools.SelectNextTool(); windowInfo.ReportSelectedTool(appTools.ActiveTool); windowInfo.ReportMeasurements(appTools.ActiveTool);} },
                 { ActionId.WindowInfoToggleVisible, () => windowInfo.Visible = !windowInfo.Visible },
                 { ActionId.WindowZoomToggleVisible, () => { windowZoom.Visible = !windowZoom.Visible;if (windowZoom.Visible) timer.Start(); else timer.Stop();}},
+                { ActionId.ToolToggleThickness, () =>  appTools.WideLinesOn = !appTools.WideLinesOn },
             };
 
             return new AppActions() { Actions = phiddleActions };

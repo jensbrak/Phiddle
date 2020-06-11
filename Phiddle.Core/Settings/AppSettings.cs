@@ -41,6 +41,7 @@ namespace Phiddle.Core.Settings
     public class SettingsTool : ISettings
     {
         public float BoundsPad { get; set; } = 4f;
+        public float Size { get; set; } = 1f;
         public SettingsToolFrame SettingsToolFrame{ get; set; } = new SettingsToolFrame();
         public SettingsPaint PaintTool { get; set; } = new SettingsPaint()
         {
@@ -51,6 +52,7 @@ namespace Phiddle.Core.Settings
             Color = SKColors.Goldenrod,
         };
         public SettingsWindowLabel Label { get; set; } = new SettingsWindowLabel();
+        public float ToolWidthFactor { get; set; } = 2f;
         public float SizeEndpoint { get; set; } = 12f;
         public Dictionary<MarkId, SettingsMark> Marks { get; set; } = new Dictionary<MarkId, SettingsMark>()
         {

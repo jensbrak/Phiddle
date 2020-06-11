@@ -40,6 +40,9 @@ namespace Phiddle.Core
 
         [Display(Name = "Toggle Middle Marks", ShortName = "Middle")]
         ToolMarksMiddleToggleVisible,
+
+        [Display(Name = "Toggle Toggle Thickness", ShortName = "Thickness")]
+        ToolToggleThickness,
     }
 
     public delegate void ActionDelegate();

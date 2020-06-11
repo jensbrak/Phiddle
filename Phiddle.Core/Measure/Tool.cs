@@ -28,12 +28,15 @@ namespace Phiddle.Core.Measure
         protected Endpoint p2; // bottom-left
         protected Endpoint p3; // top-right
         protected ToolMark[] marks;
+        protected float width;
+        protected float widthFactor;
+        private bool wideLinesOn;
 
         public Endpoint ActiveEndpoint
         {
             get
             {
-                return p0.Focused ? p0 : p1.Focused ? p1 : p2.Focused ? p2 : p3.Focused ? p3: null;
+                return p0.Focused ? p0 : p1.Focused ? p1 : p2.Focused ? p2 : p3.Focused ? p3 : null;
             }
         }
 
@@ -44,7 +47,7 @@ namespace Phiddle.Core.Measure
                 return p0.Focused ? p1 : p1.Focused ? p0 : p2.Focused ? p3 : p3.Focused ? p2 : null;
             }
         }
-        
+
         public ToolId ToolId { get; protected set; }
         public SKPaint PaintTool { get; set; }
         public bool Visible { get; set; }
@@ -54,6 +57,22 @@ namespace Phiddle.Core.Measure
         public bool Resizable { get; set; }
         public bool Resizing { get; set; }
         public Label Label { get; set; }
+        public bool WideLinesOn
+        {
+            get => wideLinesOn;
+            set
+            {
+                wideLinesOn = value;
+                var newWidth = wideLinesOn ? width * widthFactor : width;
+                PaintTool.StrokeWidth = newWidth;
+                foreach (var m in marks)
+                {
+                    m.PaintMark.StrokeWidth = newWidth;
+                }
+
+            }
+        }
+
         public LabelLocation LabelLocation
         {
             get => labelPlacement;
@@ -80,6 +99,8 @@ namespace Phiddle.Core.Measure
             frame = new Window(SKPoint.Empty, SKSize.Empty, settingsTool.SettingsToolFrame);
             frame.PaintBorder.PathEffect = SKPathEffect.CreateDash(new float[] { 10f, 5f }, 15f);
             PaintTool = settingsTool.PaintTool.ToSKPaint();
+            width = PaintTool.StrokeWidth;
+            widthFactor = settingsTool.ToolWidthFactor;
         }
 
         public void SetMarksVisibility(MarkId visibleMarks)
@@ -352,7 +373,7 @@ namespace Phiddle.Core.Measure
         protected virtual SKPoint GetLockedPos(SKPoint p)
         {
             throw new NotImplementedException("DrawMarks");
-            
+
         }
     }
 }

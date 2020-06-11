@@ -12,7 +12,21 @@ namespace Phiddle.Core
     {
         private readonly Tool[] toolSet;
         private int iActiveTool;
+        private bool wideLinesOn;
         private MarkId marksVisible;
+
+        public bool WideLinesOn
+        {
+            get => wideLinesOn;
+            set
+            {
+                wideLinesOn = value;
+                foreach (var tool in toolSet)
+                {
+                    tool.WideLinesOn = wideLinesOn;
+                }
+            }  
+        }
 
         public LabelLocation LabelLocation { get; set; }
         public MarkId MarksVisible 
@@ -48,6 +62,7 @@ namespace Phiddle.Core
                 new ToolOval(settings.Tool) { LabelLocation = LabelLocation },
             };
 
+            WideLinesOn = appState.ToolWideLinesOn;
             MarksVisible = appState.MarksVisible;
         }
 

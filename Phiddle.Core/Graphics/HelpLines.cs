@@ -1,7 +1,6 @@
 ﻿using SkiaSharp;
 using Phiddle.Core.Services;
 using Phiddle.Core.Settings;
-using Phiddle.Core.Settings;
 
 namespace Phiddle.Core.Graphics
 {

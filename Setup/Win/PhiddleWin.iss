@@ -23,7 +23,7 @@ DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 OutputBaseFilename=PhiddleSetup
-SetupIconFile=..\Resources\Logo\PhiddleIcon.ico
+SetupIconFile=..\..\Resources\Logo\PhiddleIcon.ico
 Compression=lzma
 SolidCompression=yes
 VersionInfoVersion=0.4.1
@@ -41,8 +41,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "..\Phiddle.Win\bin\Release\Phiddle.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\Phiddle.Win\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\..\Phiddle.Win\bin\Release\Phiddle.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\Phiddle.Win\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

@@ -21,6 +21,7 @@ namespace Phiddle.Win.Settings
                 { (ushort)Keys.E, ActionId.ToolMarksEndpointToggleVisible },
                 { (ushort)Keys.M, ActionId.ToolMarksMiddleToggleVisible },
                 { (ushort)Keys.T, ActionId.ToolMarksThirdToggleVisible },
+                { (ushort)Keys.W, ActionId.ToolToggleThickness },
             };
         }
     }

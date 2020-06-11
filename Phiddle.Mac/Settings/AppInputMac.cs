@@ -21,6 +21,7 @@ namespace Phiddle.Mac.Settings
                     { (ushort)NSKey.E, ActionId.ToolMarksEndpointToggleVisible },
                     { (ushort)NSKey.M, ActionId.ToolMarksMiddleToggleVisible },
                     { (ushort)NSKey.T, ActionId.ToolMarksThirdToggleVisible },
+                    { (ushort)NSKey.W, ActionId.ToolToggleThickness },
                 };
         }
     }

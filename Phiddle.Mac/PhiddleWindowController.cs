@@ -10,10 +10,9 @@ using Phiddle.Core.Services;
 using Phiddle.Core.Settings;
 using Phiddle.Mac.Extensions;
 using Phiddle.Mac.Services;
+using Phiddle.Mac.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.InteropServices;
-using Phiddle.Core.Settings;
-using Phiddle.Mac.Settings;
 
 namespace Phiddle.Mac
 {

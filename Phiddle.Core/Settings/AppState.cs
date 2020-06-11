@@ -10,5 +10,6 @@ namespace Phiddle.Core.Settings
         public bool WindowZoomVisible { get; set; } = true;
         public bool WindowInfoVisible { get; set; } = true;
         public MarkId MarksVisible { get; set; } = MarkId.Endpoint | MarkId.Phi;
+        public bool ToolWideLinesOn { get; set; } = false;
     }
 }
