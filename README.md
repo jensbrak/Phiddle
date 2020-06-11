@@ -1,7 +1,7 @@
 
 
 # Phiddle (v 0.4.1)
-<img src="Resources/Logo/PhiddleLogo_64x64.png" align="top"> Visually minimalistic screen pixel measuring program for PC (Win/Mac).
+<img src="Resources/Logo/PhiddleLogo_64x64.png" align="top"> Screen pixel measuring app with a minimalistic φlosophy.
 
 # Introduction
 
@@ -14,8 +14,8 @@
 ## Phiddle is not (and will most likely not be):
 * Fancy graphics or a full blown screen ruler program
 * Supporting physical units (or scaling/DPI-awareness) or multiple screens 
-* Well written as far as I'm concerned, code is for trying out ideas but not form basis of a real app
-* Mobile app
+* Near production quality of an app, functionality and code is for fun and to explore and... fiddle. Sorry Phiddle.
+* Supporting mobile devices
 
 # Instructions
 ## Features
