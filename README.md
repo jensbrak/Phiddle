@@ -1,7 +1,7 @@
 
 
 # Phiddle (v 0.4.1)
-<img src="Resources/Logo/PhiddleLogo_64x64.png" align="top"> Screen pixel measuring app with a minimalistic φlosophy.
+<img src="Resources/Logo/PhiddleLogo_63x63.png" align="top"> Screen pixel measuring app with a minimalistic φlosophy.
 
 # Introduction
 
