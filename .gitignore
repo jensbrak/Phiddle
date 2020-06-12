@@ -1,5 +1,6 @@
 # Inno Setup Generated Files
-Setup/Output/
+Setup/Win/Output/
+Setup/Mac/Output/
 publish/
 
 ## Ignore Visual Studio temporary files, build results, and
