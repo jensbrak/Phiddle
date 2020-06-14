@@ -27,7 +27,7 @@ namespace Phiddle.Core.Measure
         protected Endpoint p1; // bottom-right
         protected Endpoint p2; // bottom-left
         protected Endpoint p3; // top-right
-        protected ToolMark[] marks;
+        protected Mark[] marks;
         protected float width;
         protected float widthFactor;
         private bool wideLinesOn;
@@ -136,7 +136,7 @@ namespace Phiddle.Core.Measure
             }
 
             // Get new position with respect to if tool is locked or not
-            var pNew = Locked ? GetLockedPos(p) : p;
+            var pNew = Locked ? LockedPos(p) : p;
 
             // Update the focused endpoint and dependent ones accoringly
             if (p0.Focused)
@@ -169,14 +169,7 @@ namespace Phiddle.Core.Measure
             }
 
             // Make sure rect gets properly adjusted with margins
-            var left = Math.Min(Math.Min(p0.X, p1.X), Math.Min(p2.X, p3.X));
-            var top = Math.Min(Math.Min(p0.Y, p1.Y), Math.Min(p2.Y, p3.Y));
-            var right = Math.Max(Math.Max(p0.X, p1.X), Math.Max(p2.X, p3.X));
-            var bottom = Math.Max(Math.Max(p0.Y, p1.Y), Math.Max(p2.Y, p3.Y));
-
-            // Make bounds for tool a little larger than the tool itself, so that drawing bounds will not obscure the tool
-            frame.Pos = new SKPoint(left - boundsVisualPadding, top - boundsVisualPadding);
-            frame.Size = new SKSize(right - left + boundsVisualPadding * 2f, bottom - top + boundsVisualPadding * 2f);
+            UpdateBounds();
 
             // Make label be correctly positioned
             UpdateLabel();
@@ -287,20 +280,12 @@ namespace Phiddle.Core.Measure
             Resizing = false;
         }
 
-        /// <summary>
-        /// Draw the tool and its associated elements on the given canvas
-        /// </summary>
-        /// <param name="c">The canvas to draw the tool on</param>
-        public virtual void Draw(SKCanvas c)
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// Return the current measurements the tool might have in its current state
         /// </summary>
         /// <returns>The measurements</returns>
-        public virtual Dictionary<Measurement, float> GetMeasurements()
+        public virtual Dictionary<Measurement, float> Measure()
         {
             return new Dictionary<Measurement, float>();
         }
@@ -310,18 +295,51 @@ namespace Phiddle.Core.Measure
         /// </summary>
         protected void UpdateLabel()
         {
-            Label.Pos = GetLabelPos();
-            Label.Text = GetLabelText();
+            Label.Pos = LabelPos();
+            Label.Text = LabelText();
         }
 
-        protected virtual void DrawGenericVisuals(SKCanvas c)
+        protected void UpdateBounds()
+        {
+            var left = Math.Min(Math.Min(p0.X, p1.X), Math.Min(p2.X, p3.X));
+            var top = Math.Min(Math.Min(p0.Y, p1.Y), Math.Min(p2.Y, p3.Y));
+            var right = Math.Max(Math.Max(p0.X, p1.X), Math.Max(p2.X, p3.X));
+            var bottom = Math.Max(Math.Max(p0.Y, p1.Y), Math.Max(p2.Y, p3.Y));
+
+            // Make bounds for tool a little larger than the tool itself, so that drawing bounds will not obscure the tool
+            frame.Pos = new SKPoint(left - boundsVisualPadding, top - boundsVisualPadding);
+            frame.Size = new SKSize(right - left + boundsVisualPadding * 2f, bottom - top + boundsVisualPadding * 2f);
+        }
+
+        /// <summary>
+        /// Draw the tool and its associated elements on the given canvas
+        /// </summary>
+        /// <param name="c">The canvas to draw the tool on</param>
+        public virtual void Draw(SKCanvas c)
+        {
+            if (!Visible || p0 == p1)
+            {
+                return;
+            }
+            
+            DrawTool(c);
+            DrawMarks(c);
+            DrawEndpoints(c);
+            DrawFrame(c);
+            DrawLabel(c);
+        }
+
+        protected virtual void DrawFrame(SKCanvas c)
         {
             // Do we have a tool that can be moved?
             if (Visible && Movable)
             {
                 frame.Draw(c);
             }
+        }
 
+        protected virtual void DrawEndpoints(SKCanvas c)
+        {
             if (Visible && Resizable && !Resizing)
             {
                 p0.Draw(c);
@@ -329,7 +347,10 @@ namespace Phiddle.Core.Measure
                 p2.Draw(c);
                 p3.Draw(c);
             }
+        }
 
+        protected virtual void DrawLabel(SKCanvas c)
+        {
             // Show label?
             if (Visible && LabelLocation != LabelLocation.Off)
             {
@@ -337,43 +358,49 @@ namespace Phiddle.Core.Measure
             }
         }
 
-        protected void CreateMarks(SettingsTool settings, MarkId marksSupported)
+        protected void EnableMarks(SettingsTool settings, MarkId marksSupported)
         {
             var numMarks = Enum.GetValues(typeof(MarkId)).Cast<Enum>().Count(marksSupported.HasFlag);
-            marks = new ToolMark[numMarks];
+            marks = new Mark[numMarks];
             int i = 0;
 
             foreach (var markId in settings.Marks.Keys)
             {
                 if ((markId & marksSupported) != 0)
                 {
-                    marks[i++] = new ToolMark(markId, settings.Marks[markId]);
+                    marks[i++] = new Mark(markId, settings.Marks[markId]);
                 }
             }
+        }
+
+        protected virtual void DrawTool(SKCanvas c)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual void DrawMarks(SKCanvas c)
+        {
+            throw new NotImplementedException("DrawMarks");
+        }
+
+        protected virtual string LabelText()
+        {
+            throw new NotImplementedException("LabelText");
+        }
+
+        protected virtual SKPoint LabelPos()
+        {
+            throw new NotImplementedException("LabelPos");
+        }
+
+        protected virtual SKPoint LockedPos(SKPoint p)
+        {
+            throw new NotImplementedException("LockedPos");
         }
 
         public override string ToString()
         {
             return ToolId.GetDisplayName();
-        }
-
-        // Some internals: a tool needs to be able to draw marks and calculate label properties
-        protected virtual void DrawMarks(SKCanvas c)
-        {
-            throw new NotImplementedException("DrawMarks");
-        }
-        protected virtual string GetLabelText()
-        {
-            throw new NotImplementedException("DrawMarks");
-        }
-        protected virtual SKPoint GetLabelPos()
-        {
-            throw new NotImplementedException("DrawMarks");
-        }
-        protected virtual SKPoint GetLockedPos(SKPoint p)
-        {
-            throw new NotImplementedException("DrawMarks");
-
         }
     }
 }

@@ -6,19 +6,22 @@ using Phiddle.Core.Settings;
 
 namespace Phiddle.Core.Measure
 {
+    /// <summary>
+    /// Oval: based on Rect(angle)
+    /// </summary>
     public class ToolOval : ToolRect
     {
         public ToolOval(SettingsTool settingsTool) : base(settingsTool)
         {
-            CreateMarks(settingsTool, MarkId.Endpoint | MarkId.Middle | MarkId.Third | MarkId.Phi);
             ToolId = ToolId.Oval;
+            EnableMarks(settingsTool, MarkId.Endpoint | MarkId.Middle | MarkId.Third | MarkId.Phi);
         }
 
-        public override Dictionary<Measurement, float> GetMeasurements()
+        public override Dictionary<Measurement, float> Measure()
         {
             if (!Visible)
             {
-                return base.GetMeasurements();
+                return base.Measure();
             }
 
             var v = p1.Pos - p0.Pos;
@@ -26,6 +29,7 @@ namespace Phiddle.Core.Measure
             var h = Math.Abs(v.Y) / 2f;
             var a = w / 2f;
             var b = h / 2f;
+
             // Ramanujan approximation of circumference
             var c = (float)Math.PI * (3f * (a + b) - (float)Math.Sqrt((3f * a + b) * (a + 3f * b)));
             var area = a * b * (float)Math.PI;
@@ -40,7 +44,8 @@ namespace Phiddle.Core.Measure
 
             return measurements;
         }
-        protected override SKPoint GetLockedPos(SKPoint p)
+
+        protected override SKPoint LockedPos(SKPoint p)
         {
             // pP is the passive endpoint, ie is diagonal to the endpoint being moved
             var pP = DiagonalToActiveEndpoint.Pos;
@@ -54,6 +59,17 @@ namespace Phiddle.Core.Measure
             var pos = pP + a + an;
 
             return pos;
+        }
+
+        protected override void DrawTool(SKCanvas c)
+        {
+         
+            // Draw oval
+            var rx = (p1.X - p0.X) / 2f;
+            var ry = (p1.Y - p0.Y) / 2f;
+            var cx = p0.X + rx;
+            var cy = p0.Y + ry;
+            c.DrawOval(cx, cy, rx, ry, PaintTool);
         }
 
         protected override void DrawMarks(SKCanvas c)
@@ -106,27 +122,6 @@ namespace Phiddle.Core.Measure
                     c.Restore();
                 }
             }
-        }
-
-        public override void Draw(SKCanvas c)
-        {
-            if (!Visible || p0 == p1)
-            {
-                return;
-            }
-
-            // Draw marks
-            DrawMarks(c);
-
-            // Draw oval
-            var rx = (p1.X - p0.X) / 2f;
-            var ry = (p1.Y - p0.Y) / 2f;
-            var cx = p0.X + rx;
-            var cy = p0.Y + ry;
-            c.DrawOval(cx, cy, rx, ry, PaintTool);
-
-            // Draw basics
-            DrawGenericVisuals(c);
         }
     }
 }

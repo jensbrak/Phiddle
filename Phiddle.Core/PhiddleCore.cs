@@ -199,9 +199,12 @@ namespace Phiddle.Core
             // Actions
             appActions = InitializeActions();
 
+            // Screen
+            var s = screenService.Dimensions();
+
             // Tools
-            appTools = new AppTools(appStateService.Settings, appSettingsService.Settings);
-            helpLines = new HelpLines(screenService.Dimensions(), appStateService.Settings, appSettingsService.Settings.PaintHelpLines);
+            appTools = new AppTools(s, appStateService.Settings, appSettingsService.Settings);
+            helpLines = new HelpLines(s, appStateService.Settings, appSettingsService.Settings.PaintHelpLines);
 
             WindowsSizeFactor = appSettingsService.Settings.WindowSizeFactor;
             WindowZoomFactor = appSettingsService.Settings.WindowZoomFactor;
@@ -215,7 +218,6 @@ namespace Phiddle.Core
             ;
 
             // Calculate initial locations of windows with relative positions
-            var s = screenService.Dimensions();
 #if DEBUG
             var wm = appSettingsService.Settings.WindowMargin + windowApp.PaintBorder.StrokeWidth;
 #else

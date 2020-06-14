@@ -11,42 +11,24 @@ namespace Phiddle.Core.Measure
     {
         public ToolLine(SettingsTool settingsTool) : base(settingsTool)
         {
-            CreateMarks(settingsTool, MarkId.Endpoint | MarkId.Middle | MarkId.Third | MarkId.Phi);
-
             ToolId = ToolId.Line;
+            EnableMarks(settingsTool, MarkId.Endpoint | MarkId.Middle | MarkId.Third | MarkId.Phi);
+
             // Important to set position and text after constructor call
-#pragma warning disable IDE0017 // Simplify object initialization
             Label = new Label(new SKPoint(), string.Empty, settingsTool.Label);
-#pragma warning restore IDE0017 // Simplify object initialization
-            Label.Text = GetLabelText();
-            Label.Pos = GetLabelPos();
+            Label.Text = LabelText();
+            Label.Pos = LabelPos();
 
             // Show two endpoints
-            p0.Visible = true;
-            p1.Visible = true;
-        }
-        public override void Draw(SKCanvas c)
-        {
-            if (!Visible || p0 == p1)
-            {
-                return;
-            }
-
-            // Draw the line
-            c.DrawLine(p0.Pos, p1.Pos, PaintTool);
-
-            // Draw marks
-            DrawMarks(c);
-
-            // Draw basics
-            DrawGenericVisuals(c);
+            p0.Enabled = true;
+            p1.Enabled = true;
         }
 
-        public override Dictionary<Measurement, float> GetMeasurements()
+        public override Dictionary<Measurement, float> Measure()
         {
             if (!Visible)
             {
-                return base.GetMeasurements();
+                return base.Measure();
             }
 
             var measurements = new Dictionary<Measurement, float>(1)
@@ -56,12 +38,12 @@ namespace Phiddle.Core.Measure
 
             return measurements;
         }
-        protected override string GetLabelText()
+        protected override string LabelText()
         {
             return $"L = {(p0.Pos - p1.Pos).Length:0.00}";
         }
 
-        protected override SKPoint GetLabelPos()
+        protected override SKPoint LabelPos()
         {
             // Label as requested by property
             if (LabelLocation == LabelLocation.AboveMouse)
@@ -82,7 +64,7 @@ namespace Phiddle.Core.Measure
             }
         }
 
-        protected override SKPoint GetLockedPos(SKPoint p)
+        protected override SKPoint LockedPos(SKPoint p)
         {
             // pP is the passive endpoint, ie is diagonal to the endpoint being moved
             var pA = DiagonalToActiveEndpoint.Pos;
@@ -97,6 +79,12 @@ namespace Phiddle.Core.Measure
             // Change new pos with respect to chosen axis
             var pos = p - dPos;
             return pos;
+        }
+
+        protected override void DrawTool(SKCanvas c)
+        {
+            // Draw the line
+            c.DrawLine(p0.Pos, p1.Pos, PaintTool);
         }
 
         protected override void DrawMarks(SKCanvas c)

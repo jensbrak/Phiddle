@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
+using SkiaSharp;
 
 namespace Phiddle.Core
 {
@@ -50,7 +51,7 @@ namespace Phiddle.Core
             }
         }
 
-        public AppTools(AppState appState, AppSettings settings)
+        public AppTools(SKRectI screenDimensions, AppState appState, AppSettings settings)
         {
             iActiveTool = (int)appState.ActiveTool;
             LabelLocation = appState.LabelLocation;
@@ -60,6 +61,7 @@ namespace Phiddle.Core
                 new ToolLine(settings.Tool) { LabelLocation = LabelLocation },
                 new ToolRect(settings.Tool) { LabelLocation = LabelLocation },
                 new ToolOval(settings.Tool) { LabelLocation = LabelLocation },
+                new ToolAngle(settings.Tool, screenDimensions) { LabelLocation = LabelLocation },
             };
 
             WideLinesOn = appState.ToolWideLinesOn;

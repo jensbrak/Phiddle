@@ -11,9 +11,9 @@ namespace Phiddle.Core.Measure
     /// The size is also up to the tool to use as seen fit and
     /// can be seen as a recommendation. 
     /// </summary>
-    public class ToolMark
+    public class Mark
     {
-        public ToolMark(MarkId markId, SettingsMark settings)
+        public Mark(MarkId markId, SettingsMark settings)
         {
             Pos = settings.Pos;
             Size = settings.Size;

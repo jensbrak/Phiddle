@@ -24,19 +24,19 @@ namespace Phiddle.Core.Measure
         }
         public float Size { get; set; }
         public SKPaint PaintGrip { get; set; }
-        public bool Visible { get; set; }
+        public bool Enabled { get; set; }
         public bool Focused { get; set; }
         public SKPoint Pos { get; set; }
         public Endpoint(SKPoint p, SettingsTool settings)
         {
-            Visible = false;
+            Enabled = false;
             Pos = p;
             Size = settings.SizeEndpoint;
             PaintGrip = settings.PaintEndpoint.ToSKPaint(); 
         }
         public void CheckBounds(SKPoint p)
         {
-            Focused = Visible && (Pos - p).Length <= Size;
+            Focused = Enabled && (Pos - p).Length <= Size;
         }
 
         public void Move(SKPoint p)
@@ -50,7 +50,7 @@ namespace Phiddle.Core.Measure
 
         public void Draw(SKCanvas c)
         {
-            if (!Visible)
+            if (!Enabled)
             {
                 // Nothing to draw
                 return;

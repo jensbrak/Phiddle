@@ -55,7 +55,7 @@ namespace Phiddle.Core.Graphics
 
         public void ReportMeasurements(ITool tool)
         {
-            var ms = tool.GetMeasurements();
+            var ms = tool.Measure();
             var i = 0;
 
             // Clear previous

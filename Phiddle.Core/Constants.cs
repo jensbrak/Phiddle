@@ -32,5 +32,7 @@ namespace Phiddle.Core
 
         // Math
         public static readonly float PhiInv = (float)(2d / (1d + Math.Sqrt(5d)));
+        public static readonly float DegRad = (float)Math.PI / 180f;
+        public static readonly float RadDeg = (float)(180d / Math.PI);
     }
 }

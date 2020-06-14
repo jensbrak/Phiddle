@@ -10,7 +10,9 @@ namespace Phiddle.Core.Measure
         [Display(Name = "Rectangle", ShortName = "R")]
         Rect,
         [Display(Name = "Oval", ShortName = "O")]
-        Oval
+        Oval,
+        [Display(Name = "Angle", ShortName = "A")]
+        Angle,
     }
 
     /// <summary>
@@ -41,12 +43,16 @@ namespace Phiddle.Core.Measure
         Area,
         [Display(Name = "Circumference", ShortName = "C")]
         Circumference,
+        [Display(Name = "Angle Degrees", ShortName = "D")]
+        AngleDegrees,
+        [Display(Name = "Angle Radians", ShortName = "R")]
+        AngleRadians,
     }
 
     /// <summary>
     /// The categories of marks for a tool
     /// </summary>
-    
+
     [Flags]public enum MarkId
     {
         [Display(Name = "Endpoint", ShortName = "EP")]
@@ -58,5 +64,4 @@ namespace Phiddle.Core.Measure
         [Display(Name = "Third", ShortName = "⅓")]
         Third = 8,
     }
-
 }
