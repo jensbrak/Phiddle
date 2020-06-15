@@ -11,9 +11,10 @@ namespace Phiddle.Core.Measure
     /// </summary>
     public class ToolOval : ToolRect
     {
+        public override ToolId ToolId => ToolId.Oval;
+
         public ToolOval(SettingsTool settingsTool) : base(settingsTool)
         {
-            ToolId = ToolId.Oval;
             EnableMarks(settingsTool, MarkId.Endpoint | MarkId.Middle | MarkId.Third | MarkId.Phi);
         }
 

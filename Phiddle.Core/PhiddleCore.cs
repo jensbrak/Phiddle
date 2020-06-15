@@ -290,7 +290,7 @@ namespace Phiddle.Core
             }
 
             // Update tool with new mouse position. Effect of new position depends on tool state
-            if (appTools.ActiveTool.Resizing)
+            if (appTools.ActiveTool.Measuring)
             {
                 screenService.MouseState = MouseState.Normal;
                 appTools.ActiveTool.Resize(p);
@@ -304,7 +304,7 @@ namespace Phiddle.Core
             {
                 // We have a visible but 'passive' tool. Check position against tool bounds and update cursor
                 appTools.ActiveTool.CheckBounds(p);
-                screenService.MouseState = appTools.ActiveTool.Movable || appTools.ActiveTool.Resizable ? MouseState.CanGrip : MouseState.Normal;
+                screenService.MouseState = appTools.ActiveTool.CanMove || appTools.ActiveTool.CanMeasure ? MouseState.CanGrip : MouseState.Normal;
             }
 
             // Store pos for next round
@@ -413,7 +413,7 @@ namespace Phiddle.Core
         private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
             // Zoom at mousepos, unless we're resizing a locked tool. If so: get locked position of tool
-            var zoomAtPos = appTools.ActiveTool.Resizing 
+            var zoomAtPos = appTools.ActiveTool.Measuring 
                 ? appTools.ActiveTool.ActiveEndpoint.Pos 
                 : screenService.MousePosition();
             UpdateZoomWindow(zoomAtPos);

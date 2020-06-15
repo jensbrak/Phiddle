@@ -9,9 +9,10 @@ namespace Phiddle.Core.Measure
 {
     public class ToolLine : Tool
     {
+        public override ToolId ToolId => ToolId.Line;
+
         public ToolLine(SettingsTool settingsTool) : base(settingsTool)
         {
-            ToolId = ToolId.Line;
             EnableMarks(settingsTool, MarkId.Endpoint | MarkId.Middle | MarkId.Third | MarkId.Phi);
 
             // Important to set position and text after constructor call

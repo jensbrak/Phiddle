@@ -32,6 +32,8 @@ namespace Phiddle.Core.Measure
         protected float widthFactor;
         private bool wideLinesOn;
 
+        public virtual ToolId ToolId => throw new NotImplementedException("ToolId");
+
         public Endpoint ActiveEndpoint
         {
             get
@@ -48,14 +50,13 @@ namespace Phiddle.Core.Measure
             }
         }
 
-        public ToolId ToolId { get; protected set; }
         public SKPaint PaintTool { get; set; }
         public bool Visible { get; set; }
         public bool Locked { get; set; }
-        public bool Movable { get; set; }
+        public bool CanMove { get; set; }
         public bool Moving { get; set; }
-        public bool Resizable { get; set; }
-        public bool Resizing { get; set; }
+        public bool CanMeasure { get; set; }
+        public bool Measuring { get; set; }
         public Label Label { get; set; }
         public bool WideLinesOn
         {
@@ -192,7 +193,7 @@ namespace Phiddle.Core.Measure
 
         /// <summary>
         /// Check if given point is within bounds. Instead of returning the result, update tool.
-        /// Use <see cref="Movable"/> to check if last point was within bounds, ie tool in focus. 
+        /// Use <see cref="CanMove"/> to check if last point was within bounds, ie tool in focus. 
         /// </summary>
         /// <param name="p">The point to check</param>
         public virtual void CheckBounds(SKPoint p)
@@ -200,29 +201,16 @@ namespace Phiddle.Core.Measure
             // Check movement bounds
             var b = frame.Bounds;
             b.Inflate(-2 * boundsGripMargin, -2 * boundsGripMargin);
-            Movable = b.Inside(p);
+            CanMove = b.Inside(p);
 
             // Check resize bounds
             p0.CheckBounds(p);
             p1.CheckBounds(p);
             p2.CheckBounds(p);
             p3.CheckBounds(p);
-            Resizable = p0.Focused || p1.Focused || p2.Focused || p3.Focused;
+            CanMeasure = p0.Focused || p1.Focused || p2.Focused || p3.Focused;
         }
 
-        /// <summary>
-        /// Update tool at given point with next action. The action cycle is currently:
-        /// 1. Hidden --> 
-        /// 2. Resizing  --> 
-        /// 3. Passive -->
-        /// 1. Hidden ...
-        ///   
-        /// However, if the tool is 'Passive' it means that it is visible, has ben initially
-        /// resized/placed and can be moved or resized (again).
-        /// If this is possible is determined by mouse emovement - but it is next action that 
-        /// actually initiate it. .
-        /// </summary>
-        /// <param name="p"></param>
         public virtual void NextAction(SKPoint p)
         {
             // From hidden to initial resize:
@@ -235,16 +223,16 @@ namespace Phiddle.Core.Measure
                 p3.Pos = p;
 
                 p1.Focused = true;
-                Resizing = true;
+                Measuring = true;
                 Visible = true;
                 return;
             }
 
-            // From resizing to passive
-            if (Resizing)
+            // From measuring to passive
+            if (Measuring)
             {
-                // Finish resizing
-                Resizing = false;
+                // Finish measuring
+                Measuring = false;
                 return;
             }
 
@@ -257,27 +245,27 @@ namespace Phiddle.Core.Measure
             }
 
             // Passive and movable so start moving
-            if (Movable)
+            if (CanMove)
             {
                 // Start moving
                 Moving = true;
-                Movable = false;
+                CanMove = false;
                 return;
             }
 
             // Passive and resizable so start resizing (once again) 
-            if (Resizable)
+            if (CanMeasure)
             {
                 // Start resizing
-                Resizing = true;
-                Resizable = false;
+                Measuring = true;
+                CanMeasure = false;
                 return;
             }
 
             // Passive and neither movable or resizable so go back to hidden
             Visible = false;
             Moving = false;
-            Resizing = false;
+            Measuring = false;
         }
 
 
@@ -332,7 +320,7 @@ namespace Phiddle.Core.Measure
         protected virtual void DrawFrame(SKCanvas c)
         {
             // Do we have a tool that can be moved?
-            if (Visible && Movable)
+            if (Visible && CanMove)
             {
                 frame.Draw(c);
             }
@@ -340,7 +328,7 @@ namespace Phiddle.Core.Measure
 
         protected virtual void DrawEndpoints(SKCanvas c)
         {
-            if (Visible && Resizable && !Resizing)
+            if (Visible && CanMeasure && !Measuring)
             {
                 p0.Draw(c);
                 p1.Draw(c);
