@@ -61,7 +61,6 @@ namespace Phiddle.Core
                 new ToolLine(settings.Tool) { LabelLocation = LabelLocation },
                 new ToolRect(settings.Tool) { LabelLocation = LabelLocation },
                 new ToolOval(settings.Tool) { LabelLocation = LabelLocation },
-                new ToolAngle(settings.Tool, screenDimensions) { LabelLocation = LabelLocation },
             };
 
             WideLinesOn = appState.ToolWideLinesOn;

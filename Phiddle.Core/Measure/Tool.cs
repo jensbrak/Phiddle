@@ -127,7 +127,7 @@ namespace Phiddle.Core.Measure
         /// Resize the tool by updating focused endpoint to position p
         /// </summary>
         /// <param name="p">The new position of focused endpoint</param>
-        public virtual void Resize(SKPoint p)
+        public void Resize(SKPoint p)
         {
             // No endpoint focused means nothing to resize
             if (!(p0.Focused || p1.Focused || p2.Focused || p3.Focused))
@@ -219,7 +219,7 @@ namespace Phiddle.Core.Measure
         ///   
         /// However, if the tool is 'Passive' it means that it is visible, has ben initially
         /// resized/placed and can be moved or resized (again).
-        /// If this is possible is determined by mous emovement - but it is next action that 
+        /// If this is possible is determined by mouse emovement - but it is next action that 
         /// actually initiate it. .
         /// </summary>
         /// <param name="p"></param>

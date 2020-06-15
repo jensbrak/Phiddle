@@ -43,7 +43,7 @@ namespace Phiddle.Core.Graphics
             MousePosition = $"Mouse:\t{string.Format("{0:F1}, {1:F1}", pos.X, pos.Y)}";
         }
 
-        public void ReportLabelPlacement(ITool tool)
+        public void ReportLabelPlacement(Tool tool)
         {
             LabelPlacement = $"Label:\t{tool.LabelLocation.GetDisplayName()}";
         }
@@ -53,7 +53,7 @@ namespace Phiddle.Core.Graphics
             SelectedTool = $"Tool: \t{tool}";
         }
 
-        public void ReportMeasurements(ITool tool)
+        public void ReportMeasurements(Tool tool)
         {
             var ms = tool.Measure();
             var i = 0;
