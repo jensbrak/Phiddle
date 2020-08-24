@@ -63,19 +63,19 @@
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Mac" />
     <Reference Include="SkiaSharp">
-      <HintPath>..\packages\SkiaSharp.1.68.3\lib\xamarinmac2.0\SkiaSharp.dll</HintPath>
+      <HintPath>..\packages\SkiaSharp.2.80.1\lib\xamarinmac2.0\SkiaSharp.dll</HintPath>
     </Reference>
     <Reference Include="SkiaSharp.Views.Desktop.Common">
-      <HintPath>..\packages\SkiaSharp.Views.Desktop.Common.1.68.3\lib\netstandard2.0\SkiaSharp.Views.Desktop.Common.dll</HintPath>
+      <HintPath>..\packages\SkiaSharp.Views.Desktop.Common.2.80.1\lib\netstandard2.0\SkiaSharp.Views.Desktop.Common.dll</HintPath>
     </Reference>
     <Reference Include="SkiaSharp.Views.Mac">
-      <HintPath>..\packages\SkiaSharp.Views.1.68.3\lib\xamarinmac2.0\SkiaSharp.Views.Mac.dll</HintPath>
+      <HintPath>..\packages\SkiaSharp.Views.2.80.1\lib\xamarinmac2.0\SkiaSharp.Views.Mac.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
-      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.3.1.5\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.3.1.7\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection">
-      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.3.1.5\lib\netstandard2.1\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.3.1.7\lib\netstandard2.1\Microsoft.Extensions.DependencyInjection.dll</HintPath>
     </Reference>
     <Reference Include="System.Buffers">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\netstandard2.0\System.Buffers.dll</HintPath>
@@ -136,4 +136,5 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
+  <Import Project="..\packages\SkiaSharp.2.80.1\build\xamarinmac2.0\SkiaSharp.targets" Condition="Exists('..\packages\SkiaSharp.2.80.1\build\xamarinmac2.0\SkiaSharp.targets')" />
 </Project>

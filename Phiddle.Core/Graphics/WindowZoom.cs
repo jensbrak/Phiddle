@@ -19,7 +19,7 @@ namespace Phiddle.Core.Graphics
             PaintCrosshair = settings.PaintCrosshair.ToSKPaint();
             CrosshairSize = settings.CrossHairSize;
             CrosshairVisible = true;
-            Visible = true;
+            Enabled = true;
             Transparent = false;
         }
 
@@ -31,7 +31,7 @@ namespace Phiddle.Core.Graphics
 
         public override void Draw(SKCanvas c)
         {
-            if (!Visible)
+            if (!Enabled)
             {
                 return;
             }

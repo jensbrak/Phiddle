@@ -81,11 +81,12 @@ namespace Phiddle.Core
         {
             get
             {
-                return appTools.ActiveTool.Locked;
+                return false;
+                //return appTools.ActiveTool.Locked;
             }
             set
             {
-                appTools.ActiveTool.Locked = value;
+                //appTools.ActiveTool.Locked = value;
             }
         }
 
@@ -214,7 +215,7 @@ namespace Phiddle.Core
             windowInfo = new WindowTextInfo(SKPoint.Empty, InfoWindowSize, appSettingsService.Settings.WindowInfo); 
             windowZoom = new WindowZoom(SKPoint.Empty, ZoomWindowSize, appSettingsService.Settings.WindowZoom) 
             { 
-                CrosshairVisible = !helpLines.Visible }
+                CrosshairVisible = !helpLines.Enabled }
             ;
 
             // Calculate initial locations of windows with relative positions
@@ -254,9 +255,9 @@ namespace Phiddle.Core
         /// </summary>
         public void ShutDown()
         {
-            appStateService.Settings.HelpLinesVisible = helpLines.Visible;
-            appStateService.Settings.WindowInfoVisible = windowInfo.Visible;
-            appStateService.Settings.WindowZoomVisible = windowZoom.Visible;
+            appStateService.Settings.HelpLinesVisible = helpLines.Enabled;
+            appStateService.Settings.WindowInfoVisible = windowInfo.Enabled;
+            appStateService.Settings.WindowZoomVisible = windowZoom.Enabled;
             appStateService.Settings.ActiveTool = appTools.ActiveTool.ToolId;
             appStateService.Settings.LabelLocation = appTools.LabelLocation; 
             appStateService.Settings.MarksVisible = appTools.MarksVisible;
@@ -279,36 +280,28 @@ namespace Phiddle.Core
         /// <param name="p">Position of mouse (cursor)</param>
         public void MouseMoved(SKPoint p)
         {
+            // Update tool with new mouse position. Tool will refresh whatever is needed
+            appTools.ActiveTool.Refresh(p);
+
             // Always make info window show latest position and help lines are properly positioned
             UpdateInfoWindow(p);
-            helpLines.Pos = p;
+            helpLines.Refresh(p);
 
             // Nothing else to update?
-            if (!appTools.ActiveTool.Visible)
+            if (!appTools.ActiveTool.Enabled)
             {
                 return;
             }
 
-            // Update tool with new mouse position. Effect of new position depends on tool state
-            if (appTools.ActiveTool.Measuring)
-            {
-                screenService.MouseState = MouseState.Normal;
-                appTools.ActiveTool.Resize(p);
-            }
-            else if (appTools.ActiveTool.Moving)
-            {
-                screenService.MouseState = MouseState.Moving;
-                appTools.ActiveTool.Move(p - lastPos);
-            }
-            else
-            {
-                // We have a visible but 'passive' tool. Check position against tool bounds and update cursor
-                appTools.ActiveTool.CheckBounds(p);
-                screenService.MouseState = appTools.ActiveTool.CanMove || appTools.ActiveTool.CanMeasure ? MouseState.CanGrip : MouseState.Normal;
-            }
-
-            // Store pos for next round
-            lastPos = p;
+            // Update cursor
+            screenService.MouseState =
+                appTools.ActiveTool.IsMeasuring()
+                    ? MouseState.Normal
+                    : appTools.ActiveTool.IsMoving()
+                        ? MouseState.Moving
+                        : appTools.ActiveTool.AnyPointFocused()
+                            ? MouseState.CanGrip
+                            : MouseState.Normal;
         }
 
         /// <summary>
@@ -369,7 +362,7 @@ namespace Phiddle.Core
         private void UpdateZoomWindow(SKPoint p)
         {
             // Do we need to update at all?
-            if (!windowZoom.Visible)
+            if (!windowZoom.Enabled)
             {
                 return;
             }
@@ -397,7 +390,6 @@ namespace Phiddle.Core
         private void UpdateInfoWindow(SKPoint p)
         {
             windowInfo.ReportSelectedTool(appTools.ActiveTool);
-            windowInfo.ReportMousePosition(p);
             windowInfo.ReportLabelPlacement(appTools.ActiveTool);
             windowInfo.ReportMeasurements(appTools.ActiveTool);
             var invalidateAtPos = new SKPointI((int)InfoWindowLocation.X + 1, (int)InfoWindowLocation.Y + 1);
@@ -413,8 +405,8 @@ namespace Phiddle.Core
         private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
             // Zoom at mousepos, unless we're resizing a locked tool. If so: get locked position of tool
-            var zoomAtPos = appTools.ActiveTool.Measuring 
-                ? appTools.ActiveTool.ActiveEndpoint.Pos 
+            var zoomAtPos = appTools.ActiveTool.IsMeasuring() 
+                ? appTools.ActiveTool.SelectedPoint().Pos 
                 : screenService.MousePosition();
             UpdateZoomWindow(zoomAtPos);
         }
@@ -435,15 +427,15 @@ namespace Phiddle.Core
             var phiddleActions = new Dictionary<ActionId, ActionDelegate>(Enum.GetValues(typeof(ActionId)).Length)
             {
                 { ActionId.ApplicationExit, () => ShutDown()},
-                { ActionId.HelpLinesToggleVisible, () => { helpLines.Visible = !helpLines.Visible; windowZoom.CrosshairVisible = !helpLines.Visible; } },
+                { ActionId.HelpLinesToggleVisible, () => { helpLines.Enabled = !helpLines.Enabled; windowZoom.CrosshairVisible = !helpLines.Enabled; } },
                 { ActionId.LabelTogglePlacement, () => appTools.ToggleLabelPlacement() },
                 { ActionId.ToolMarksGoldenRatioToggleVisible, () => appTools.ToggleToolMarksVisibility(MarkId.Phi) },
                 { ActionId.ToolMarksEndpointToggleVisible, () => appTools.ToggleToolMarksVisibility(MarkId.Endpoint) },
                 { ActionId.ToolMarksMiddleToggleVisible, () => appTools.ToggleToolMarksVisibility(MarkId.Middle) },
                 { ActionId.ToolMarksThirdToggleVisible, () => appTools.ToggleToolMarksVisibility(MarkId.Third) },
                 { ActionId.ToolSelectNext, () => { appTools.SelectNextTool(); windowInfo.ReportSelectedTool(appTools.ActiveTool); windowInfo.ReportMeasurements(appTools.ActiveTool);} },
-                { ActionId.WindowInfoToggleVisible, () => windowInfo.Visible = !windowInfo.Visible },
-                { ActionId.WindowZoomToggleVisible, () => { windowZoom.Visible = !windowZoom.Visible;if (windowZoom.Visible) timer.Start(); else timer.Stop();}},
+                { ActionId.WindowInfoToggleVisible, () => windowInfo.Enabled = !windowInfo.Enabled },
+                { ActionId.WindowZoomToggleVisible, () => { windowZoom.Enabled = !windowZoom.Enabled;if (windowZoom.Enabled) timer.Start(); else timer.Stop();}},
                 { ActionId.ToolToggleThickness, () =>  appTools.WideLinesOn = !appTools.WideLinesOn },
             };
 

@@ -51,7 +51,7 @@ namespace Phiddle.Core.Measure
         }
 
         public SKPaint PaintTool { get; set; }
-        public bool Visible { get; set; }
+        public bool Enabled { get; set; }
         public bool Locked { get; set; }
         public bool CanMove { get; set; }
         public bool Moving { get; set; }
@@ -84,13 +84,16 @@ namespace Phiddle.Core.Measure
             }
         }
 
+        public ToolState State { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Dictionary<Measurement, float> Measurements { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="screenService"></param>
         protected Tool(SettingsTool settingsTool)
         {
-            Visible = false;
+            Enabled = false;
             p0 = new Endpoint(SKPoint.Empty, settingsTool);
             p1 = new Endpoint(SKPoint.Empty, settingsTool);
             p2 = new Endpoint(SKPoint.Empty, settingsTool);
@@ -128,7 +131,7 @@ namespace Phiddle.Core.Measure
         /// Resize the tool by updating focused endpoint to position p
         /// </summary>
         /// <param name="p">The new position of focused endpoint</param>
-        public void Resize(SKPoint p)
+        public void Measure(SKPoint p)
         {
             // No endpoint focused means nothing to resize
             if (!(p0.Focused || p1.Focused || p2.Focused || p3.Focused))
@@ -196,7 +199,7 @@ namespace Phiddle.Core.Measure
         /// Use <see cref="CanMove"/> to check if last point was within bounds, ie tool in focus. 
         /// </summary>
         /// <param name="p">The point to check</param>
-        public virtual void CheckBounds(SKPoint p)
+        public virtual void Refresh(SKPoint p)
         {
             // Check movement bounds
             var b = frame.Bounds;
@@ -214,7 +217,7 @@ namespace Phiddle.Core.Measure
         public virtual void NextAction(SKPoint p)
         {
             // From hidden to initial resize:
-            if (!Visible)
+            if (!Enabled)
             {
                 // Start resizing
                 p0.Pos = p;
@@ -224,7 +227,7 @@ namespace Phiddle.Core.Measure
 
                 p1.Focused = true;
                 Measuring = true;
-                Visible = true;
+                Enabled = true;
                 return;
             }
 
@@ -263,7 +266,7 @@ namespace Phiddle.Core.Measure
             }
 
             // Passive and neither movable or resizable so go back to hidden
-            Visible = false;
+            Enabled = false;
             Moving = false;
             Measuring = false;
         }
@@ -305,11 +308,11 @@ namespace Phiddle.Core.Measure
         /// <param name="c">The canvas to draw the tool on</param>
         public virtual void Draw(SKCanvas c)
         {
-            if (!Visible || p0 == p1)
+            if (!Enabled || p0 == p1)
             {
                 return;
             }
-            
+
             DrawTool(c);
             DrawMarks(c);
             DrawEndpoints(c);
@@ -320,7 +323,7 @@ namespace Phiddle.Core.Measure
         protected virtual void DrawFrame(SKCanvas c)
         {
             // Do we have a tool that can be moved?
-            if (Visible && CanMove)
+            if (Enabled && CanMove)
             {
                 frame.Draw(c);
             }
@@ -328,7 +331,7 @@ namespace Phiddle.Core.Measure
 
         protected virtual void DrawEndpoints(SKCanvas c)
         {
-            if (Visible && CanMeasure && !Measuring)
+            if (Enabled && CanMeasure && !Measuring)
             {
                 p0.Draw(c);
                 p1.Draw(c);
@@ -340,7 +343,7 @@ namespace Phiddle.Core.Measure
         protected virtual void DrawLabel(SKCanvas c)
         {
             // Show label?
-            if (Visible && LabelLocation != LabelLocation.Off)
+            if (Enabled && LabelLocation != LabelLocation.Off)
             {
                 Label.Draw(c);
             }
@@ -389,6 +392,21 @@ namespace Phiddle.Core.Measure
         public override string ToString()
         {
             return ToolId.GetDisplayName();
+        }
+
+        public bool IsMeasuring()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsMoving()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AnyPointFocused()
+        {
+            throw new NotImplementedException();
         }
     }
 }

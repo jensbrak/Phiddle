@@ -6,15 +6,15 @@
 # Introduction
 
 ## Phiddle is:
-* Free to try or use if you want to!
+* Free to try or use if you want to (see License)
 * A simple screen measuring app using basic shapes drawn on desktop
 * A playful test of SkiaSharp and more - with code to match that purpose but not more
-* A desktop app running on Windows and Mac. Kind of.
+* A desktop app running on Windows and Mac. Kind of (see Known issues and shortcomings under Issues and roadmap)
 
 ## Phiddle is not (and will most likely not be):
 * Fancy graphics or a full blown screen ruler program
-* Supporting physical units (or scaling/DPI-awareness) or multiple screens 
-* Near production quality of an app, functionality and code is for fun and to explore and... fiddle. Sorry Phiddle.
+* Supporting physical units (or scaling/DPI-awareness) or multiple screens
+* Near production quality of an app, functionality and code is for fun and to explore and... fiddle. Sorry Phiddle
 * Supporting mobile devices
 
 # Instructions
@@ -33,9 +33,9 @@
 * A third left mouse click, depending on location:
   * If inside bounds of tool: move tool (click again to place)
   * If inside bounds of tool endpoint: resize tool using selected endpoint (click again to finalize)
-  * If outside bounds of tool: hide tool / clear current measurements 
+  * If outside bounds of tool: hide tool / clear current measurements
 
-## Shortcuts 
+## Shortcuts
 Default key map, see 'Settings files' for details
 * Esc: Exit program
 * Space: Cycle measuring tool (line/rect/oval)
@@ -70,7 +70,7 @@ For available Key Codes see:
 * Mac: `NSKey` enum in `AppKit`
 * Win: `Keys` enum in `System.Windows.Forms`
 
-Note: For convenience, the phiddle.appinput<win/mac>.json file has all available keys for each platform. A tad unconventional but I thought: why not? :) 
+Note: For convenience, the phiddle.appinput<win/mac>.json file has all available keys for each platform. A tad unconventional but I thought 'why not?'' :)
 
 # Implementation
 ## Dependencies
@@ -99,35 +99,51 @@ Really not much to it. It's a poor mans Xamarin Forms wannabe:
 * Based on Macios/Cocoa parts of Xamarin
 * Partial implementation: leftovers from templates still there (menu and more)
 * Unclear distinction between WindowController, Window, ViewController and Views, need better understanding of Mac programming before going any further
+* Works "good enough" at the time being but needs more attention really
 
 ## Phiddle.Win
 * Based on Windows Forms, only way I could get transparency to desktop to work with reasonable effort
 
 # Issues and roadmap
+Issue = Bug; not working as intended or not working despite efforts
+ToDo = Planned / incomplete part of the app but no effort to fully implement it has been made
+
 ## Known issues and shortcomings
-* Multiple screens don't work, currently mess up program real good
-* [Mac]: Updating zoom/info window live only work when moving mouse. There's something about that refresh...
-* [Mac]: Permissions required to record screen (zoom window) not accessible when app is running
+* [Mac]: Issue: Updating zoom/info window live only work when moving mouse. There's something about that refresh...
+* [Mac]: Issue: Permissions required to record screen (zoom window) not accessible when app is running (or at least while debugging/running from Visual Studio Mac - when running as standalone app it seem to work fine to access those settings)
+* [Mac]: ToDo: Menu from template still there. Remove it or use it (for settings for instance)
+* [Mac/Win]: ToDo: Multiple screens don't work, currently mess up program real good. Haven't even tried it on either platform since a very long time ago and when I did it didn't work)
 
 ## Roadmap / Ideas
-* General: Settings interface (idea: use native UI for this - Win: notification area, Mac: system menu)
-* General: multiple measurements/tools (ie several objects on screen, not one only)?
-* Tool: additional tool: multiline (polygon) 
-* Tool: rotate placed tool
-* Tool: measure angle (maybe combined with rotation?)
-* Visuals: automatically move windows when measuring obscured area
-* Visuals: window placement in any corner as per settings
-* Visuals: show major/minor marks 
-* Stability: deal with multiple screens and scaling/DPI
+* Core: Shortcut to copy measurements to clip book or similar
+* Core/Win/Mac: Add support for a second lock shortcut, first can be resize uniform size and second golden if applicable
+* Core/Win/Mac: Settings interface (idea: use native UI for this - Win: notification area, Mac: system menu)
+* Core: multiple measurements/tools (ie several objects on screen, not one only)?
+* Core: replace info window with "log" that scrolls, replace labels with info label at mouse pointer and add labels to tools only when they're passive/finished measuring
+* Core: popup info/help window
+* Core: visuals for selected tool ("icon")
+* Core: additional tool: multiline (polygon)
+* Core: rotate placed tool
+* Core: measure angle (maybe combined with multiline?)
+* Core: rotate tool (how to handle resize then?)
+* Core: automatically move windows when measuring obscured area
+* Core: window placement in any corner as per settings
+* Core: show major/minor marks on tools
+* Win/Mac: Stability: deal with multiple screens and scaling/DPI
 
 # History
+## 0.x.0
+* Core: toggle wide/normal tool width (shortcut: 'w')
+* Core: refactoring tool design (code wise) to a more general one
+* ...
+
 ## 0.4.1
 * Win: Updated components and framework
 * General: Setup for Windows
 * Visuals: Logo and icon
 
 ## 0.4.0
-* Core: Settings functionality refactored 
+* Core: Settings functionality refactored
 * Core: AppSettings refactored
 * Core: AppState settings service added
 * Core: Defaults moved from single file to appropriate settings file
@@ -175,7 +191,7 @@ Of course there are such apps. I just missed them as I was way to eager to try m
 
 * https://sourceforge.net/projects/screenruler/  with source here on GitHub: https://github.com/bluegrams/ScreenRuler
 
-I also found a couple of commercial programs that I haven't tried but they seem to boast with lots of Golden Ratio related functionality. I have intentionally NOT looked at them since I didn't want to get influenced by them. They're most likely awesome and more useful than my program ever will be (or aim to be). 
+I also found a couple of commercial programs that I haven't tried but they seem to boast with lots of Golden Ratio related functionality. I have intentionally NOT looked at them since I didn't want to get influenced by them. They're most likely awesome and more useful than my program ever will be (or aim to be).
 
 * http://www.markuswelz.de/software2/
 * https://www.phimatrix.com/
@@ -186,6 +202,3 @@ The latter one even share parts of its name with my little app. Which is no coin
 It's just a combination of the two words "Phi" and "Fiddle". Phi is the greek letter usually representing the Golden Ratio number. Fiddle is what I wanted to do with the program. Fiddle with different software components and concepts, like SkiaSharp, Xamarin or multiplatform development and dependency injection basics. But also because as it can be used as a tool to fiddle around with on the screen, measuring things in it.
 
 End of story?
-
-
-

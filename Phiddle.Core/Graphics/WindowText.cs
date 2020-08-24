@@ -40,13 +40,13 @@ namespace Phiddle.Core.Graphics
         {
             PaintLines = settings.PaintBorder.ToSKPaint();
             tabStops = new float[] { 10f }; // Left margin
-            Visible = true;
+            Enabled = true;
         }
 
         public override void Draw(SKCanvas c)
         {
             // If hidden, draw nothing
-            if (!Visible)
+            if (!Enabled)
             {
                 return;
             }

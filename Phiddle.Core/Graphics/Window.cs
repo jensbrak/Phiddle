@@ -14,7 +14,7 @@ namespace Phiddle.Core.Graphics
         public SKSize Size { get; set; }
         public bool Transparent { get; set; }
 
-        public bool Visible { get; set; }
+        public bool Enabled { get; set; }
 
         public Window(SKPoint pos, SKSize size, SettingsWindow settings)
         {

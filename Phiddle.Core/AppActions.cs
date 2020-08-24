@@ -45,8 +45,6 @@ namespace Phiddle.Core
         ToolToggleThickness,
     }
 
-    public delegate void ActionDelegate();
-
     public class AppActions
     {
         public Dictionary<ActionId, ActionDelegate> Actions { get; set; }

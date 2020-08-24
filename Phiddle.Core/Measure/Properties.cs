@@ -13,6 +13,8 @@ namespace Phiddle.Core.Measure
         Oval,
         [Display(Name = "Angle", ShortName = "A")]
         Angle,
+        [Display(Name = "Line2", ShortName = "L2")]
+        Line2,
     }
 
     /// <summary>

@@ -73,6 +73,12 @@ namespace Phiddle.Core.Extensions
             return v1;
         }
 
+        /// <summary>
+        /// Project a point to the X- and Y-axis formed by origo given by another point
+        /// </summary>
+        /// <param name="p0">The point to project</param>
+        /// <param name="p">Point of origo to project to</param>
+        /// <returns></returns>
         public static (SKPoint, SKPoint) ProjectXY(this SKPoint p0, SKPoint p)
         {
             // Make a direction vector and a filter to get the nearest axis
@@ -86,7 +92,7 @@ namespace Phiddle.Core.Extensions
             var an = new SKPoint(Math.Sign(ys * v.X), Math.Sign(xs * v.Y)).Scale(a.Length);
 
             // The point on closest axis is a, the point on the other axis is an
-            var points = (closest: a, Normalize: an);
+            var points = (closest: a, other: an);
             return points;
         }
 

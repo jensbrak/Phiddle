@@ -11,7 +11,7 @@ namespace Phiddle.Core
 {
     public class AppTools
     {
-        private readonly Tool[] toolSet;
+        private readonly MultiTool[] toolSet;
         private int iActiveTool;
         private bool wideLinesOn;
         private MarkId marksVisible;
@@ -24,7 +24,7 @@ namespace Phiddle.Core
                 wideLinesOn = value;
                 foreach (var tool in toolSet)
                 {
-                    tool.WideLinesOn = wideLinesOn;
+                    //tool.WideLinesOn = wideLinesOn;
                 }
             }  
         }
@@ -38,12 +38,12 @@ namespace Phiddle.Core
                 marksVisible = value;
                 foreach (var tool in toolSet)
                 {
-                    tool.SetMarksVisibility(marksVisible);
+                    //tool.SetMarksVisibility(marksVisible);
                 }
             }
         }
 
-        public Tool ActiveTool
+        public MultiTool ActiveTool
         {
             get
             {
@@ -51,16 +51,18 @@ namespace Phiddle.Core
             }
         }
 
-        public AppTools(SKRectI screenDimensions, AppState appState, AppSettings settings)
+        public AppTools(SKRectI screensSize, AppState appState, AppSettings settings)
         {
-            iActiveTool = (int)appState.ActiveTool;
+            //iActiveTool = (int)appState.ActiveTool;
+            iActiveTool = 0;
             LabelLocation = appState.LabelLocation;
 
-            toolSet = new Tool[]
+            toolSet = new MultiTool[]
             {
-                new ToolLine(settings.Tool) { LabelLocation = LabelLocation },
-                new ToolRect(settings.Tool) { LabelLocation = LabelLocation },
-                new ToolOval(settings.Tool) { LabelLocation = LabelLocation },
+                //new ToolLine(settings.Tool) { LabelLocation = LabelLocation },
+                //new ToolRect(settings.Tool) { LabelLocation = LabelLocation },
+                //new ToolOval(settings.Tool) { LabelLocation = LabelLocation },
+                new ToolLine2(settings.Tool, screensSize),
             };
 
             WideLinesOn = appState.ToolWideLinesOn;
@@ -74,12 +76,12 @@ namespace Phiddle.Core
 
         public void ToggleLabelPlacement()
         {
-            LabelLocation = (LabelLocation)((int)++LabelLocation % Enum.GetNames(typeof(LabelLocation)).Length);
+            //LabelLocation = (LabelLocation)((int)++LabelLocation % Enum.GetNames(typeof(LabelLocation)).Length);
 
-            foreach (var tool in toolSet)
-            {
-                tool.LabelLocation = LabelLocation;
-            }
+            //foreach (var tool in toolSet)
+            //{
+            //    tool.LabelLocation = LabelLocation;
+            //}
         }
 
         public void ToggleToolMarksVisibility(MarkId toolmarkToToggle)

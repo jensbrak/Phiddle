@@ -4,23 +4,23 @@ using Phiddle.Core.Settings;
 
 namespace Phiddle.Core.Graphics
 {
-    public class HelpLines : IDrawable
+    public class HelpLines : IDrawable, IPosition
     {
         private readonly SKPaint paint;
 
-        public SKPoint Pos { get; set; }
+        public SKPoint Pos   { get; set; }
         public SKRect Bounds { get; set; }
-        public bool Visible { get; set; }
+        public bool Enabled { get; set; }
         public HelpLines(SKRect bounds, AppState appState, SettingsPaint settings)
         {
-            Visible = appState.HelpLinesVisible;
+            Enabled = appState.HelpLinesVisible;
             paint = settings.ToSKPaint();
             Bounds = bounds;
         }
 
         public void Draw(SKCanvas c)
         {
-            if (!Visible)
+            if (!Enabled)
             {
                 return;
             }
@@ -29,5 +29,9 @@ namespace Phiddle.Core.Graphics
             c.DrawLine(Pos.X, 0, Pos.X, Bounds.Bottom, paint);
         }
 
+        public void Refresh(SKPoint p)
+        {
+            Pos = p;
+        }
     }
 }

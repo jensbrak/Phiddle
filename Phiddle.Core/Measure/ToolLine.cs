@@ -27,7 +27,7 @@ namespace Phiddle.Core.Measure
 
         public override Dictionary<Measurement, float> Measure()
         {
-            if (!Visible)
+            if (!Enabled)
             {
                 return base.Measure();
             }

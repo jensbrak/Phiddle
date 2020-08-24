@@ -6,7 +6,7 @@ using System;
 
 namespace Phiddle.Core.Graphics
 {
-    public class WindowTextInfo : WindowText
+    public class WindowTextInfo : WindowText, IPosition
     {
         private enum LineNumbers
         {
@@ -33,19 +33,19 @@ namespace Phiddle.Core.Graphics
         }
         public WindowTextInfo(SKPoint pos, SKSize size, SettingsWindowText settings) : base(pos, size, settings)
         {
-            Visible = true;
+            Enabled = true;
             Lines = new string[Enum.GetNames(typeof(LineNumbers)).Length + Enum.GetNames(typeof(Measurement)).Length - 1];
             TabStops = new float[] { settings.TextLeftMargin };
         }
 
-        public void ReportMousePosition(SKPoint pos)
+        public void Refresh(SKPoint pos)
         {
             MousePosition = $"Mouse:\t{string.Format("{0:F1}, {1:F1}", pos.X, pos.Y)}";
         }
 
-        public void ReportLabelPlacement(Tool tool)
+        public void ReportLabelPlacement(MultiTool tool)
         {
-            LabelPlacement = $"Label:\t{tool.LabelLocation.GetDisplayName()}";
+            //LabelPlacement = $"Label:\t{tool.LabelLocation.GetDisplayName()}";
         }
 
         public void ReportSelectedTool(ITool tool)
@@ -53,9 +53,8 @@ namespace Phiddle.Core.Graphics
             SelectedTool = $"Tool: \t{tool}";
         }
 
-        public void ReportMeasurements(Tool tool)
+        public void ReportMeasurements(MultiTool tool)
         {
-            var ms = tool.Measure();
             var i = 0;
 
             // Clear previous
@@ -67,7 +66,7 @@ namespace Phiddle.Core.Graphics
             i = 0;
 
             // Update
-            foreach (var m in ms)
+            foreach (var m in tool.Measurements)
             {
                 // Get enum descriptive name and trim down to max X characters
                 var mName = m.Key.GetDisplayName();

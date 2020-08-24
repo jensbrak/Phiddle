@@ -11,8 +11,6 @@ namespace Phiddle.Core.Graphics
 
         public float TextPad { get; set; }
 
-//        public SKPaint PaintText { get; set; }
-
         public string Text 
         {
             get
