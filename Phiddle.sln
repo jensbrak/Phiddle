@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{3B38
 		Scripts\BuildSetupWin.py = Scripts\BuildSetupWin.py
 	EndProjectSection
 EndProject
-Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "Phiddle.Win", "Phiddle.Win\Phiddle.Win.csproj", "{2B3A3C87-54D3-4904-AECE-326BD466DDEB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phiddle.Win", "Phiddle.Win\Phiddle.Win.csproj", "{C944C0A1-169D-4600-93B3-5655543A79BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,10 +34,10 @@ Global
 		{4D92B6FE-4A11-437F-BAA1-1E30D998C621}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D92B6FE-4A11-437F-BAA1-1E30D998C621}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D92B6FE-4A11-437F-BAA1-1E30D998C621}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B3A3C87-54D3-4904-AECE-326BD466DDEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B3A3C87-54D3-4904-AECE-326BD466DDEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B3A3C87-54D3-4904-AECE-326BD466DDEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B3A3C87-54D3-4904-AECE-326BD466DDEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C944C0A1-169D-4600-93B3-5655543A79BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C944C0A1-169D-4600-93B3-5655543A79BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C944C0A1-169D-4600-93B3-5655543A79BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C944C0A1-169D-4600-93B3-5655543A79BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
