@@ -5,6 +5,17 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>PhiddleIcon.ico</ApplicationIcon>
+    <Version>0.5.0</Version>
+    <Authors>jensbrak</Authors>
+    <Company></Company>
+    <Description>Screen pixel measuring app with a minimalistic φlosophy. Windows Desktop Version.</Description>
+    <Copyright>jensbrak</Copyright>
+    <PackageIcon>PhiddleIcon.ico</PackageIcon>
+    <Product>Phiddle</Product>
+    <PackageProjectUrl>zon3.se/phiddle</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jensbrak/Phiddle</RepositoryUrl>
+    <PackageId>PhiddleWin</PackageId>
+    <AssemblyName>PhiddleWin</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +31,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Phiddle.Core\Phiddle.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Resources\Logo\PhiddleIcon.ico">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

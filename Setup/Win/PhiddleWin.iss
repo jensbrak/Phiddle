@@ -2,10 +2,10 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Phiddle"
-#define MyAppVersion "0.4.1"
+#define MyAppVersion "0.5.0"
 #define MyAppPublisher "jensbrak"
 #define MyAppURL "https://zon3.se/phiddle"
-#define MyAppExeName "Phiddle.exe"
+#define MyAppExeName "PhiddleWin.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -26,7 +26,7 @@ OutputBaseFilename=PhiddleSetup
 SetupIconFile=..\..\Resources\Logo\PhiddleIcon.ico
 Compression=lzma
 SolidCompression=yes
-VersionInfoVersion=0.4.1
+VersionInfoVersion=0.5.0
 VersionInfoCompany=zon3.se
 VersionInfoCopyright=jensbrak
 VersionInfoProductName=zon3.se
@@ -37,12 +37,12 @@ WizardImageFile=PhiddleSetup100.bmp,PhiddleSetup125.bmp,PhiddleSetup150.bmp,Phid
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\..\Phiddle.Win\bin\Release\Phiddle.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\Phiddle.Win\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\..\Phiddle.Win\bin\Release\net5.0-windows\PhiddleWin.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\Phiddle.Win\bin\Release\net5.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
