@@ -1,0 +1,140 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Phiddle (v 0.5.0)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0  Screen pixel measuring app with a minimalistic \u966?losophy.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Introduction\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Phiddle is:\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Free to try or use if you want to!\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab A simple screen measuring app using basic shapes drawn on desktop\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab A playful test of SkiaSharp and more - with code to match that purpose but not more\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab A desktop app running on Windows and Mac. Kind of.\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Phiddle is not (and will most likely not be):\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Fancy graphics or a full blown screen ruler program\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Supporting physical units (or scaling/DPI-awareness) or multiple screens\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Near production quality of an app, functionality and code is for fun and to explore and\u8230? fiddle. Sorry Phiddle.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Supporting mobile devices\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Instructions\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Features\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Line measuring (length)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Rectangle measuring (width, height, area, circumferene)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Oval measuring (width, height, area, circumference)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Marks for endpoints, golden ratio, middle, thirds\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Lock to axis, golden ratio or fixed width/height ratio (depending on tool)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Zoom window for fine grained measuring\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Configurable via settings files\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 How to use\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Left mouse click to start measure at current mouse position\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab A second left mouse click to stop measure at current mouse position\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab A third left mouse click, depending on location:\par}
+{\pard \ql \f0 \sa0 \li720 \fi-360 \endash \tx360\tab If inside bounds of tool: move tool (click again to place)\par}
+{\pard \ql \f0 \sa0 \li720 \fi-360 \endash \tx360\tab If inside bounds of tool endpoint: resize tool using selected endpoint (click again to finalize)\par}
+{\pard \ql \f0 \sa0 \li720 \fi-360 \endash \tx360\tab If outside bounds of tool: hide tool / clear current measurements\sa180\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Shortcuts\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Default key map, see \u8216'Settings files\u8217' for details * Esc: Exit program * Space: Cycle measuring tool (line/rect/oval) * H: Toggle help lines (on/off) * L: Cycle tool label position (off/center tool/below mouse) * I: Toggle information window (on/off) * Z: Toggle zoom window (on/off) * E: Toggle endpoint marks * G: Toggle golden ratio marks * M: Toggle middle marks * T: Toggle third marks * W: Toggle tool width (normal/wide) * Ctrl: Lock tool while measuring (see Lock tool)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Lock tool\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Line: lock will align tool with X or Y axis (closest)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Rect: lock will keep rectangle width/height aspect to golden ratio\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Oval: lock will keep the oval width and hight equal, ie make a circle\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Settings files\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Located in user settings directory: * Mac: {\f1 Users/<name>/.config/phiddle/} * Win: {\f1 Users and settings\\<name>\\AppData\\Roaming\\phiddle\\}\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Files and their contents: * {\f1 phiddle.appinputwin.json}: Settings mapping Key Codes to Phiddle Actions for Windows client * {\f1 phiddle.appinputmac.json}: Settings mapping Key Codes to Phiddle Actions for Mac client * {\f1 phiddle.appstate.json}: State of Phiddle to be used next launch (selected tool and more) * {\f1 phiddle.appsettings.json}: Configurable settings of Phiddle (colors, fonts and more)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 For available Key Codes see: * Mac: {\f1 NSKey} enum in {\f1 AppKit} * Win: {\f1 Keys} enum in {\f1 System.Windows.Forms}\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Note: For convenience, the phiddle.appinput.json file has all available keys for each platform. A tad unconventional but I thought: why not? :)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Implementation\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Dependencies\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab .NET Framework\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Microsoft.Extensions.DependencyInjection\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab SkiaSharp\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab SkiaSharp.Views.Desktop.Common\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab SkiaSharp.Views.WindowsForms (Windows version)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab SkiaSharp.Views (Mac version)\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 General\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Really not much to it. It\u8217's a poor mans Xamarin Forms wannabe: * A common project for shared code (Phiddle.Core) * A Mac specific project with launcher for Mac * A Win specific project with launcher for Win\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Phiddle.Core\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Drawing of basic UI components ({\f1 /Graphics/})\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Drawing of tools that measure pixels ({\f1 /Tools/})\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Basic settings and persistance of these ({\f1 /Settings/})\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab DI-sort-of classes ({\f1 /Services/})\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Helper, mainly extending SkiaSharp 2D components ({\f1 /Extensions/})\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Basic logic for app ({\f1 PhiddleCore.cs}, {\f1 AppTools.cs} and {\f1 AppActions.cs})\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Phiddle.Mac\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Based on Macios/Cocoa parts of Xamarin\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Partial implementation: leftovers from templates still there (menu and more)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Unclear distinction between WindowController, Window, ViewController and Views, need better understanding of Mac programming before going any further\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Phiddle.Win\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Based on Windows Forms, only way I could get transparency to desktop to work with reasonable effort\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Issues and roadmap\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Known issues and shortcomings\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Multiple screens don\u8217't work, currently mess up program real good\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab \par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\field{\*\fldinst{HYPERLINK "Updating%20zoom/info%20window%20live%20only%20work%20when%20moving%20mouse.%20There's%20something%20about%20that%20refresh..."}}{\fldrslt{\ul
+Mac
+}}}
+: Permissions required to record screen (zoom window) not accessible when app is running\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Roadmap / Ideas\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab General: Settings interface (idea: use native UI for this - Win: notification area, Mac: system menu)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab General: multiple measurements/tools (ie several objects on screen, not one only)?\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Tool: additional tool: multiline (polygon)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Tool: rotate placed tool\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Tool: measure angle (maybe combined with rotation?)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Visuals: automatically move windows when measuring obscured area\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Visuals: window placement in any corner as per settings\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Visuals: show major/minor marks\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Stability: deal with multiple screens and scaling/DPI\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 History\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 0.5.0\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Win: Updated packages and framework (.NET5)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: Updated packages and framework (.NET5)\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 0.4.1\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab General: Setup for Windows\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Visuals: Logo and icon\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 0.4.0\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: Settings functionality refactored\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: AppSettings refactored\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: AppState settings service added\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: Defaults moved from single file to appropriate settings file\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Clients: Logging service added where needed\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Clients: AppInput refactored\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Fixed: Lock tool works only partially, resize secondary endpoint using lock fail\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 0.3.0\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: Settings service to load/save settings classes\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: Interface slimmed down (replaced by single point for user input)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Mac: Key Map (normal keys only)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Win: Key Map (normal keys only)\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 0.2.0\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: resize rect/oval in any corner\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: new tool: Oval\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: marks for 1/2 and 1/3\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: toggle marks\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Mac: almost fully working version for Mac, some issues unresolved\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Fixed: Placement of window bottom/right is off without translate (Skiasharp Forms/Control issue?)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Visuals: group zoom and info windows together and make them smaller/less obscuring\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 0.1.0\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: move placed tool\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: resize placed tool\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: Info and Zoom window\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: Hide/Show windows\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: Hide/Show help lines\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: Toggle label placement\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: Line and Rect tools\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Core: Label on tools\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Win: up to date with Core\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Golden ratio and this app - Bonus section\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Math is \u8230? hard. I mean\u8230? fun!\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 It\u8217's hard not to appreciate the beauty of many mathematical concepts and ideas. I, like many (?), have issues using math without being frustrated. Feeling my own lack of understanding limiting the fun and usability of math. But some things are just too cool to ignore. Like the Golden Ratio. In the simplest form a number: {\f1 1.61...}. If you go a little beyond that number you will find that it\u8217's more of a\u8230? way of looking at things. A \u8230? philosopy.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Golden Ratio and measuring pixels\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 One of the most well known uses of the Golden Ratio is to find harmonic relations between something \u8220"shorter\u8221" and something slightly \u8220"longer\u8221". Like the ratio of a rectangle, the relation between the short and long sides. I believe it is more commonly used as a confirmation of that certain things has good proportions, rather than a way to actually design them that way to begin with.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 You\u8217'll find the Golden Ratio in artworks, in common shapes around you and you\u8217'll find it in nature. It is fun to measure things and realize how common the ratio is. This is where I wanted to do something. Did not find any good application that enabled me to measure things on the screen of my computer (from photos to UI components, you name it!).\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Of course those apps exist\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Of course there are such apps. I just missed them as I was way to eager to try my own luck doing one. I\u8217'd like to point out one specific (that I happened to do a PR for by adding Golden Ratio markers). I really like it and it\u8217's a nice, usable, open-source screen ruler app. Check it out:\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab https://sourceforge.net/projects/screenruler/ with source here on GitHub: https://github.com/bluegrams/ScreenRuler\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 I also found a couple of commercial programs that I haven\u8217't tried but they seem to boast with lots of Golden Ratio related functionality. I have intentionally NOT looked at them since I didn\u8217't want to get influenced by them. They\u8217're most likely awesome and more useful than my program ever will be (or aim to be).\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab http://www.markuswelz.de/software2/\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab https://www.phimatrix.com/\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 The latter one even share parts of its name with my little app. Which is no coincidence (no, did not borrow from it) and leads me to the final note:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Phiddle\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 It\u8217's just a combination of the two words \u8220"Phi\u8221" and \u8220"Fiddle\u8221". Phi is the greek letter usually representing the Golden Ratio number. Fiddle is what I wanted to do with the program. Fiddle with different software components and concepts, like SkiaSharp, Xamarin or multiplatform development and dependency injection basics. But also because as it can be used as a tool to fiddle around with on the screen, measuring things in it.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 End of story?\par}
+}

@@ -105,25 +105,34 @@ Really not much to it. It's a poor mans Xamarin Forms wannabe:
 
 # Issues and roadmap
 ## Known issues and shortcomings
-* Multiple screens don't work, currently mess up program real good
-* [Mac]: Updating zoom/info window live only work when moving mouse. There's something about that refresh...
-* [Mac]: Permissions required to record screen (zoom window) not accessible when app is running
+* General: Multiple screens don't work, currently mess up program real good
+* General: Settings files does not support updates, ie new version might crash if settings structure has changed
+* Mac: Updating zoom/info window live only work when moving mouse. There's something about that refresh...
+* Mac: Permissions required to record screen (zoom window) not accessible when app is running
 
 ## Roadmap / Ideas
+* General: Splash screen in-app with startup instructions (shortcuts/help) that is bound to key too
 * General: Settings interface (idea: use native UI for this - Win: notification area, Mac: system menu)
-* General: multiple measurements/tools (ie several objects on screen, not one only)?
-* Tool: additional tool: multiline (polygon) 
+* General: multiple measurements pose usability problems but maybe "save" measurements for easy "reload" / reference
+* General: Secondary key binding and functionality for additional tool-lock possibilities
+* General: variable alpha channel using mouse scroll wheel of mouse (or similar)
+* Tool: additional tool: multiline (open polygon, non self-crossing)
+* Tool: additional tool: polygon  (closed polygon, non self-crossing)
 * Tool: rotate placed tool
 * Tool: measure angle (maybe combined with rotation?)
+* Tool: movable overlay using image
 * Visuals: automatically move windows when measuring obscured area
-* Visuals: window placement in any corner as per settings
 * Visuals: show major/minor marks 
-* Stability: deal with multiple screens and scaling/DPI
+* Stability: deal with multiple screens and proper scaling/DPI
 
 # History
-## 0.5.0
+## 0.5.0-RC1
 * Win: Updated packages and framework (.NET5)
 * Core: Updated packages and framework (.NET5)
+* Core: DPI-settings from Program.cs
+* Setup: Windows setup now use Pandoc for .MD -> .rtf
+### Notes
+* Mac version NOT updated in this release
 
 ## 0.4.1
 * General: Setup for Windows
