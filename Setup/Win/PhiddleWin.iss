@@ -11,7 +11,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{FB39014C-DC70-4F97-B23E-6D0A6E6646C3}
+AppId={{04EA4485-791C-49BD-B90B-CA138F8742C7}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -22,23 +22,21 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
+LicenseFile=C:\src\Phiddle\LICENSE
+InfoAfterFile=C:\src\Phiddle\README.md
+OutputDir=C:\src\Phiddle\Setup\Win\Output
 OutputBaseFilename=PhiddleSetup
-SetupIconFile=..\..\Resources\Logo\PhiddleIcon.ico
+SetupIconFile=C:\src\Phiddle\Resources\Logo\PhiddleIcon.ico
 Compression=lzma
 SolidCompression=yes
-VersionInfoVersion=0.5.0
-VersionInfoCompany=zon3.se
-VersionInfoCopyright=jensbrak
-VersionInfoProductName=zon3.se
-DisableWelcomePage=False
 WizardImageFile=PhiddleSetup100.bmp,PhiddleSetup125.bmp,PhiddleSetup150.bmp,PhiddleSetup175.bmp,PhiddleSetup200.bmp,PhiddleSetup225.bmp,PhiddleSetup250.bmp
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
-Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
 Source: "..\..\Phiddle.Win\bin\Release\net5.0-windows\PhiddleWin.exe"; DestDir: "{app}"; Flags: ignoreversion
@@ -51,10 +49,6 @@ Name: "{group}\{cm:ProgramOnTheWeb,{#MyAppName}}"; Filename: "{#MyAppURL}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
-Name: "{group}\{cm:UninstallProgram, {#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-
-[ThirdParty]
-UseRelativePaths=True
