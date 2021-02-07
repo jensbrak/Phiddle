@@ -1,18 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>PhiddleCore</AssemblyName>
-    <Version>0.4.1</Version>
+    <Version>0.5.0</Version>
     <Authors>jensbrak</Authors>
     <Copyright>jensbrak</Copyright>
     <PackageProjectUrl>zon3.se/phiddle</PackageProjectUrl>
-    <ReleaseVersion>0.4.1</ReleaseVersion>
+    <ReleaseVersion>0.5.0</ReleaseVersion>
     <Company>jensbrak</Company>
-    <PackageIcon>PhiddleIcon_64x64.png</PackageIcon>
+    <PackageIcon>PhiddleIcon.ico</PackageIcon>
     <RepositoryUrl>https://github.com/jensbrak/Phiddle</RepositoryUrl>
     <ApplicationIcon>PhiddleIcon.ico</ApplicationIcon>
     <SignAssembly>false</SignAssembly>
+    <Product>Phiddle</Product>
+    <Description>Screen pixel measuring app with a minimalistic φlosophy. Core module for multiplatform functionality.</Description>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -30,6 +34,10 @@
 
   <ItemGroup>
     <None Remove="appSettings.json" />
+    <None Include="..\Resources\Logo\PhiddleIcon.ico">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Input\Target.cs" />
