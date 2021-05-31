@@ -4,6 +4,7 @@
 <img src="Resources/Logo/PhiddleLogo_63x63.png" align="top"> Screen pixel measuring app with a minimalistic φlosophy.
 
 # Introduction
+<img src="Resources/Screnshots/Phiddle01.png" align="top"><img src="Resources/Screenshots/Phiddle02.png" align="top">
 
 ## Phiddle is:
 * Free to try or use if you want to!
