@@ -1,4 +1,25 @@
+# NOTICE
+This repo is now ARCHIVED. 
 
+Phiddle was primarly an exploration of SkiaSharp and .NET, in the context of creating a simple, low effort
+multiplatform desktop application with fully transparent desktop overlay. A fun excercise with a purpose of 
+being just that and nothing more.
+
+Some of its most crucial features worked because of the choice of using frameworks and components that
+provided them; 2D rendering with hardware support using SkiaSharp, multiplatform desktop support using
+Windows Forms and these two wired together using SkiaSharps OpenGL Windows Forms control. It was a deliberate
+choice but also a known weakness.
+
+...which became apparent after bumping versions of the frameworks over time. At some point, Phiddle went from
+being a desktop overlay rendering application to being a slideshow, performance wise. I was never tempted
+to investigate why and even less so to try to fix it. 
+
+Let me be clear: SkiaSharp performs well. Windows Forms is excellent at what it do. But the use case of a fully 
+transparent desktop overly with 2D rendering and zoom window is pushing beyond what these frameworks are intended 
+to be used for - with reasonable effort at least. 
+
+With this, I retire this little... experiment, but keep it here for anyone that is curious about it. It may have
+some value for someone, like it had for me at the time. Cheers! /J
 
 # Phiddle (v 0.5.0)
 <img src="Resources/Logo/PhiddleLogo_63x63.png" align="top"> Screen pixel measuring app with a minimalistic φlosophy.
